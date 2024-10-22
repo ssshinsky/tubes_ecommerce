@@ -20,7 +20,7 @@
                             <i class="fas fa-star fa-2x" data-value="4" onclick="rateProduct(4)"></i>
                             <i class="fas fa-star fa-2x" data-value="5" onclick="rateProduct(5)"></i>
                         </div>
-                        <input  id="rating-value" value="0">
+                        <p>⭐⭐⭐⭐⭐</p>
                     </div>
 
                     <div class="mb-4">
