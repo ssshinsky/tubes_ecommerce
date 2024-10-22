@@ -10,7 +10,7 @@
             ">
                 <i class="fas fa-check-circle fa-5x text-white mb-4"></i>
                 <h2 class="text-white mb-3">Pesanan Anda Telah Diterima!</h2>
-                <p class="text-white">Terima kasih telah berbelanja di toko kami. Pesanan Anda sedang kami proses dan akan segera dikirim.</p>
+                <p class="text-white">Terima kasih telah berbelanja di toko kami.</p>
                 
                 <div class="mt-4 p-4" style="
                     background-color: #B3B792;
