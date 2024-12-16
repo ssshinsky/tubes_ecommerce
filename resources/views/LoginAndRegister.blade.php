@@ -13,7 +13,8 @@
     <body>
         <div class="container" id="container">
             <div class="form-container sign-up">
-                <form>
+                <form id="registerForm" method="POST">
+                    @csrf
                     <h1 class="title">Create Account</h1>
                     <div class="social-icons">
                         <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
@@ -23,17 +24,20 @@
                     </div>
 
                     <span class="title">or use your email account</span>
-                    <input type="text" placeholder="Nama">
-                    <input type="number" placeholder="Nomor Telepon">
-                    <input type="text" placeholder="Alamat">
-                    <input type="email" placeholder="Email">
-                    <input type="password" placeholder="Password">
-                    <button><a href="{{ url('Home') }}" style="color: #E5E0D8">Register</a></button>
+                    <input type="text" name="nama" placeholder="Nama" required>
+                    <input type="number" name="no_telp" placeholder="Nomor Telepon" required>
+                    <input type="text" name="alamat" placeholder="Alamat" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <button>
+                         Register
+                    </button>
                 </form>
-            </div>
+            </div>  
             
             <div class="form-container sign-in">
-                <form>
+                <form id="loginForm">
+                    @csrf
                     <h1 class="title">Login</h1>
                     <div class="social-icons">
                         <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
@@ -42,15 +46,80 @@
                         <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
                         <a href="{{ url('dashboard') }}" class="icon"><i class="fa-solid fa-pen"></i></a>
                     </div>
-
                     <span class="title">or use your email account</span>
-                    <input type="email" placeholder="Email">
-                    <input type="password" placeholder="Password">
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Password" required>
                     <a class="title" href="#">Forget Your Password?</a>
-                    <button><a href="{{ url('Home') }}" style="color: #E5E0D8">Login</a></button>
+                    <button>Log in</button>
                 </form>
             </div>
-            
+
+            <script>
+                // Script untuk handle submit form register (AJAX)
+                document.getElementById('registerForm').addEventListener('submit', function(e) {
+                        e.preventDefault();
+
+                        let formData = new FormData(this);
+                        let data = {};
+
+                        formData.forEach((value, key) => {
+                            data[key] = value;
+                        });
+
+                        fetch('/api/register', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(data),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.message === 'Registrasi berhasil!') {
+                                alert(data.message); // Menampilkan pesan sukses
+                                window.location.href = '/register'; // Redirect ke halaman registrasi
+                            } else {
+                                alert(data.message); // Menampilkan pesan error jika ada
+                            }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
+
+                // Script untuk handle submit form login (AJAX)
+                document.getElementById('loginForm').addEventListener('submit', function(e) {
+                    e.preventDefault(); // Mencegah form untuk reload halaman
+
+                    let formData = new FormData(this);
+                    let data = {};
+                    
+                    formData.forEach((value, key) => {
+                        data[key] = value;
+                    });
+
+                    fetch('/api/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message === 'Authenticated') {
+                            alert(data.message); // Menampilkan pesan sukses
+                            window.location.href = '/Home'; // Redirect ke halaman Home setelah login berhasil
+                        } else {
+                            alert(data.message); // Menampilkan pesan error jika ada
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
+            </script>
+
             <div class="toggle-container">
                 <div class="toggle">
                     <div class="toggle-panel toggle-left">

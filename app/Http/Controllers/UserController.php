@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Controller ;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 
 class UserController extends Controller{
+    public function showRegisterForm()
+    {
+        return view('loginAndRegister'); 
+    }
     public function register(Request $request){
         $registrationData = $request->all();
 
         $validate = Validator::make($registrationData, [
-            'name' => 'required|max:60',
+            'nama' => 'required|max:60',
             'email' => 'required|email:rfc,dns|unique:user',
             'password' => 'required|min:8',
             'no_telp' => 'required|numeric',
@@ -27,12 +31,13 @@ class UserController extends Controller{
 
         $user = User::create($registrationData);
 
-        return response([
-            'message' => 'Register Success',
-            'user' => $user
-        ], 200);
+        return redirect()->route('loginAndRegister')->with('success', 'Registrasi berhasil!');
     }
 
+    public function showLoginForm()
+    {
+        return view('login'); // Halaman login, sesuaikan dengan view Anda
+    }
     public function login(Request $request){
         $loginData = $request->all();
 
@@ -51,12 +56,7 @@ class UserController extends Controller{
         $user = Auth::user();
         $token = $user->createToken('Authentication Token')->accessToken;
 
-        return response([
-            'message' => 'Authenticated',
-            'user' => $user,
-            'token_type' => 'Bearer',
-            'access_token' => $token
-        ]);
+        return redirect()->route('/Home')->with('success', 'Registrasi berhasil!');
     }
 
     public function logout(Request $request){
