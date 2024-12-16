@@ -263,6 +263,12 @@
         <img src="{{ asset('images/payment.png') }}" alt="Payment Icon" class="admin-avatar"> 
         <p>Konfirmasi Pembayaran</p>
     </div>
+    <div class="admin-info" style="background-color: #b3b792; margin-top: 10px;">
+        <a href="{{ url('/daftarBarang') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center;">
+        <img src="{{ asset('images/addBarang.png') }}" alt="Tambah Barang Icon" class="admin-avatar"> 
+        <p>Daftar Barang</p>
+    </a>
+</div>
 </div>
 
 <header id="header" style="position: relative;">
