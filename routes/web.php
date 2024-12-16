@@ -146,6 +146,9 @@ Route::get('/daftarBarang', function () {
     return view('daftarBarang', ['items' => $items]);
 });
 
-Route::post('/barang/store', [daftarBarangController::class, 'store'])->name('daftarBarang.store');
+
 Route::get('/daftarBarang', [daftarBarangController::class, 'index'])->name('daftarBarang.index');
-Route::delete('/deleteBarang/{id}', [daftarBarangController::class, 'destroy'])->name('daftarBarang.destroy');
+Route::post('/daftarBarang', [daftarBarangController::class, 'store'])->name('daftarBarang.store');
+Route::delete('/daftarBarang/{id}', [daftarBarangController::class, 'destroy'])->name('daftarBarang.destroy');
+Route::get('/daftarBarang/{id}/edit', [daftarBarangController::class, 'edit'])->name('daftarBarang.edit');
+Route::put('/daftarBarang/{id}', [daftarBarangController::class, 'update'])->name('daftarBarang.update');
