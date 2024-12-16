@@ -43,10 +43,10 @@ class ProdukController extends Controller{
             return response(['message' => $validate->errors()], 400);
         }
         
-        $user = Auth::user();
-        if(!$user){
-            return response(['message' => 'User Not Found!'], 404);
-        }
+        // $user = Auth::user();
+        // if(!$user){
+        //     return response(['message' => 'User Not Found!'], 404);
+        // }
 
         $uploadFolder = 'produk';
         $image = $request->file('gambar_produk');
@@ -54,7 +54,7 @@ class ProdukController extends Controller{
         $uploadedImageResponse = basename($image_uploaded_path);
 
         $storeData['gambar_produk'] = $uploadedImageResponse;
-        $storeData['id_user'] = $user->id;
+        // $storeData['id_user'] = $user->id;
 
         $produk = Produk::create($storeData);
 

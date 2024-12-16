@@ -13,8 +13,8 @@ class UserController extends Controller{
         $registrationData = $request->all();
 
         $validate = Validator::make($registrationData, [
-            'name' => 'required|max:60',
-            'email' => 'required|email:rfc,dns|unique:user',
+            'nama' => 'required|max:60',
+            'email' => 'required|unique:users',
             'password' => 'required|min:8',
             'no_telp' => 'required|numeric',
             'alamat' => 'required',
@@ -25,11 +25,11 @@ class UserController extends Controller{
 
         $registrationData['password'] = bcrypt($request->password);
 
-        $user = User::create($registrationData);
+        $users = User::create($registrationData);
 
         return response([
             'message' => 'Register Success',
-            'user' => $user
+            'user' => $users
         ], 200);
     }
 
@@ -37,7 +37,7 @@ class UserController extends Controller{
         $loginData = $request->all();
 
         $validate = Validator::make($loginData, [
-            'email' => 'required|email:rfc,dns',
+            'email' => 'required|string|email',
             'password' => 'required|min:8',
         ]);
         if($validate->fails()) {
@@ -49,7 +49,7 @@ class UserController extends Controller{
         }
 
         $user = Auth::user();
-        $token = $user->createToken('Authentication Token')->accessToken;
+        $token = $user->createToken('Authentication Token')->plainTextToken;
 
         return response([
             'message' => 'Authenticated',
@@ -60,7 +60,7 @@ class UserController extends Controller{
     }
 
     public function logout(Request $request){
-        $request->user()->token()->revoke();
+        $request->user()->currentAccessToken()->delete();
 
         return response([
             'message' => 'Logged out'

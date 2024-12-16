@@ -17,7 +17,7 @@ class Produk extends Model{
         'nama',
         'harga',
         'kategori',
-        'deksripsi',
+        'deskripsi',
         'stok',
     ];
 

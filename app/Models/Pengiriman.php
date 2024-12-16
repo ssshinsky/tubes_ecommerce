@@ -16,7 +16,7 @@ class Pengiriman extends Model{
         'id_transaksi',
         'no_resi',
         'tanggal_pengiriman',
-        'status_pengiriman',
+        'status',
         'alamat_pengiriman',
     ];
 
