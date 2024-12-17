@@ -3,6 +3,7 @@
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\CartController;
 
 Route::put('/produk/{id}', [ProdukController::class, 'update'])->name('daftarBarang.update');
 Route::delete('/produk/{id}', [ProdukController::class, 'destroy'])->name('daftarBarang.destroy');
@@ -21,13 +22,20 @@ Route::view('/bayar', 'bayar');
 Route::view('/berhasilbayar', 'berhasilbayar');
 Route::view('/pilihbayar', 'pilihbayar');
 Route::view('/cart', 'cart');
-Route::view('/terima', 'terima');
+Route::view('/terima', 'terima')->name('terima');
 Route::view('/review', 'review');
 Route::view('/selesai', 'selesai');
 Route::get('/login', [UserController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [UserController::class, 'login']);
 Route::get('/register', [UserController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [UserController::class, 'register'])->name('register');
+
+// Route::post('/add-to-cart/{productId}', [ProdukController::class, 'addToCart'])->name('add.to.cart');
+Route::post('/add-to-cart/{productId}', [CartController::class, 'addToCart'])->name('add.to.cart');
+Route::get('/cart', [CartController::class, 'index'])->name('cart');
+Route::get('/cart/{id}/remove', [CartController::class, 'removeFromCart'])->name('remove.from.cart');
+Route::delete('/remove-from-cart/{productId}', [CartController::class, 'removeFromCart'])->name('remove.from.cart');
+Route::put('/update-quantity/{productId}', [CartController::class, 'updateQuantity'])->name('update.quantity');
 
 Route::get('/loginAndRegister', function () {
     return view('LoginAndRegister');

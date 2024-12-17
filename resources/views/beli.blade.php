@@ -35,79 +35,76 @@
                 <p class="product-description text-white m-0">Deskripsi Produk : Makanan anjing royal canin memiliki nutrisi yang lengkap sesuai dengan kebutuhan anjing kecil agar pertumbuhannya maksimal.</p>
             </div>
 
-            <div class="w-100 p-3 d-flex align-items-center justify-content-between" style="background-color: #B3B792; border-radius: 0 0 10px 10px;">
-                <div class="input-group" style="width: auto;">
-                    <button class="btn btn-outline-secondary" onclick="decreaseQuantity()" style="border-radius: 20px 0 0 20px; border-color: #8ba889; background-color: #849573; color: white;">-</button>
-                    <input type="number" value="1" min="1" class="form-control text-center" style="width: 60px; border-radius: 0; border-color: #849573;" id="quantity" onchange="updateTotalPrice()">
-                    <button class="btn btn-outline-secondary" onclick="increaseQuantity()" style="border-radius: 0 20px 20px 0; border-color: #8ba889; background-color: #849573; color: white;">+</button>
-                </div>
+             <!-- Form untuk menambah produk ke keranjang -->
+             <form action="{{ route('add.to.cart', ['productId' => 1]) }}" method="POST" id="cartForm">
+    @csrf
+    <input type="hidden" name="image" value="images/canin.jpg">
+    <input type="hidden" name="name" value="Makanan Anjing Royal Canin untuk Anjing Kecil">
+    <input type="hidden" name="price" value="400000">
+    <input type="hidden" name="quantity" id="quantityInput" value="1">
+</form>
 
-                <div class="d-flex" style="gap: 10px;">
-                    <button class="btn btn-success btn-animate" onclick="addToCart()" style="border-radius: 20px; padding: 8px 20px; font-size: 1rem; background-color: #849573; color: white;">
-                        <i class="fas fa-cart-plus"></i>
-                    </button>
+<div class="w-100 p-3 d-flex align-items-center justify-content-between" style="background-color: #B3B792; border-radius: 0 0 10px 10px;">
+    <div class="input-group" style="width: auto;">
+        <button class="btn btn-outline-secondary" onclick="decreaseQuantity()" style="border-radius: 20px 0 0 20px; border-color: #8ba889; background-color: #849573; color: white;">-</button>
+        <input type="number" value="1" min="1" class="form-control text-center" style="width: 60px; border-radius: 0; border-color: #849573;" id="quantity" onchange="updateQuantity()">
+        <button class="btn btn-outline-secondary" onclick="increaseQuantity()" style="border-radius: 0 20px 20px 0; border-color: #8ba889; background-color: #849573; color: white;">+</button>
+    </div>
 
-                    <button class="btn btn-success btn-animate" onclick="goToPayment()" style="border-radius: 20px; padding: 8px 20px; font-size: 1rem; margin-left: 10px; background-color: #849573;">
-                        <i class="fas fa-credit-card"></i>
-                        Beli
-                    </button>
-                </div>
-            </div>
-        </div>
+    <div class="d-flex" style="gap: 10px;">
+        <button class="btn btn-success btn-animate" onclick="addToCart()" style="border-radius: 20px; padding: 8px 20px; font-size: 1rem; background-color: #849573; color: white;">
+            <i class="fas fa-cart-plus"></i>
+        </button>
+
+        <button type="submit" class="btn btn-success btn-animate" onclick="goToPayment()" style="border-radius: 20px; padding: 8px 20px; font-size: 1rem; margin-left: 10px; background-color: #849573;">
+            <i class="fas fa-credit-card"></i>
+            Beli
+        </button>
     </div>
 </div>
 
 <script>
-    const pricePerUnit = 400000;
-
-    function updateTotalPrice() {
-        const quantityInput = document.getElementById('quantity');
-        const totalPriceElement = document.getElementById('total-price');
-        const quantity = parseInt(quantityInput.value);
-        const totalPrice = quantity * pricePerUnit;
-        totalPriceElement.innerText = 'Rp ' + totalPrice.toLocaleString();
+    // Fungsi untuk mengupdate kuantitas di input
+    function updateQuantity() {
+        const quantity = document.getElementById("quantity").value;
+        document.getElementById("quantityInput").value = quantity; // Update value quantity pada form
     }
 
+    // Fungsi untuk menambah kuantitas produk
     function increaseQuantity() {
-        var quantityInput = document.getElementById('quantity');
-        var currentValue = parseInt(quantityInput.value);
-        quantityInput.value = currentValue + 1;
-        updateTotalPrice();
+        const quantityInput = document.getElementById("quantity");
+        quantityInput.value = parseInt(quantityInput.value) + 1; // Menambah kuantitas
+        updateQuantity(); // Update value di input hidden
     }
 
+    // Fungsi untuk mengurangi kuantitas produk
     function decreaseQuantity() {
-        var quantityInput = document.getElementById('quantity');
-        var currentValue = parseInt(quantityInput.value);
-        if (currentValue > 1) {
-            quantityInput.value = currentValue - 1;
-            updateTotalPrice();
+        const quantityInput = document.getElementById("quantity");
+        if (parseInt(quantityInput.value) > 1) {
+            quantityInput.value = parseInt(quantityInput.value) - 1; // Mengurangi kuantitas
+            updateQuantity(); // Update value di input hidden
         }
     }
 
-    function goToPayment() {
-        const quantityInput = document.getElementById('quantity');
-        const totalPrice = quantityInput.value * pricePerUnit;
-        localStorage.setItem('quantity', quantityInput.value);
-        localStorage.setItem('total', totalPrice);
-        location.href = '{{ url('bayar') }}';
-    }
-
+    // Fungsi untuk submit form saat tombol "Tambah ke Keranjang" diklik
     function addToCart() {
-        const quantityInput = document.getElementById('quantity');
-        const totalPrice = quantityInput.value * pricePerUnit;
-        localStorage.setItem('cart-quantity', quantityInput.value);
-        localStorage.setItem('cart-total', totalPrice);
-        Toastify({
-            text: "Item berhasil ditambahkan ke keranjang!",
-            duration: 3000,
-            gravity: "top", 
-            position: 'right', 
-            backgroundColor: "#4CAF50",
-            className: "info",
-        }).showToast();
+        document.getElementById("cartForm").submit(); // Submit form untuk menambahkan ke keranjang
     }
+     
+    
 </script>
-
+@if(session('success'))
+                    <script>
+                        Toastify({
+                            text: "{{ session('success') }}",
+                            duration: 3000,
+                            backgroundColor: "green",
+                            close: true,
+                            gravity: "top",
+                            position: "right"
+                        }).showToast();
+                    </script>
+                @endif
 <style>
     .btn-animate {
         transition: all 0.3s ease;

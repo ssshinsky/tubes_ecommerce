@@ -133,4 +133,39 @@ class ProdukController extends Controller
             'data' => null
         ], 400);
     }
+
+
+    //Data Dummy
+
+    public function addToCart(Request $request, $productId)
+    {
+        // Ambil data produk berdasarkan ID
+        $product = Produk::find($productId);
+
+        // Ambil jumlah produk dari input form
+        $quantity = $request->input('quantity', 1); // default 1 jika tidak diisi
+
+        // Periksa apakah produk sudah ada dalam keranjang sesi
+        $cart = session()->get('cart', []);
+
+        // Jika produk sudah ada, tambahkan jumlahnya
+        if(isset($cart[$productId])) {
+            $cart[$productId]['quantity'] += $quantity;
+        } else {
+            // Jika produk belum ada, tambahkan ke keranjang
+            $cart[$productId] = [
+                'name' => $product->name,
+                'price' => $product->price,
+                'quantity' => $quantity
+            ];
+        }
+
+        // Simpan keranjang ke sesi
+        session()->put('cart', $cart);
+
+        // Tampilkan notifikasi berhasil ditambahkan
+        session()->flash('added_to_cart', true);
+
+        return redirect()->route('products.index'); // Ganti dengan route yang sesuai
+    }
 }
