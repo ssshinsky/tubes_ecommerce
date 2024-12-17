@@ -16,12 +16,12 @@ class Produk extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'gambar_produk',
-        'nama',
-        'harga',
-        'kategori',
-        'deskripsi',
-        'stok',
+        'gambar_produk', 
+        'nama',           
+        'harga',          
+        'kategori',      
+        'deskripsi',      
+        'stok',           
     ];
 
     public function pemesanan()

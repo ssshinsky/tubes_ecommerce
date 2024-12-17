@@ -3,6 +3,8 @@
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProdukController;
+use App\Models\Produk;
+
 
 
 Route::get('/daftarBarang', [ProdukController::class, 'index'])->name('daftarBarang.index');
@@ -42,6 +44,11 @@ Route::get('/Home', function (){
 
 Route::get('/beli', function (){
     return view('beli');
+});
+
+Route::get('/beli/{id}', function ($id) {
+    $item = Produk::findOrFail($id);
+    return view('beli', ['item' => $item]);
 });
 
 Route::get('/kucing', function (){
@@ -122,6 +129,12 @@ Route::get('/rating', function () {
 
     return view('rating', ['ratings' => $ratings]); 
 });
+
+
+
+Route::get('/Home', [ProdukController::class, 'home'])->name('home');
+
+Route::get('/kucing', [ProdukController::class, 'kucing'])->name('kucing');
 
 // Route::get('/daftarBarang', function () {
 //     $items = [

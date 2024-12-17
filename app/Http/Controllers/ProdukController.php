@@ -11,11 +11,23 @@ use Illuminate\Support\Facades\Validator;
 class ProdukController extends Controller
 {
     public function index()
-{
-     $produk = Produk::all(); 
-    return view('daftarBarang', compact('produk'));
-}
+    {
+        $produk = Produk::all(); 
+        return view('daftarBarang', compact('produk'));
+    }
 
+
+    public function home(){
+        $produk = Produk::inRandomOrder()->get();
+
+        return view('Home', compact('produk'));
+    }
+
+    public function kucing(){
+        $produk = Produk::inRandomOrder()->get();
+
+        return view('kucing', compact('produk'));
+    }
 
     public function show($id)
     {
@@ -37,15 +49,18 @@ class ProdukController extends Controller
             'stok' => 'required|numeric',
             'gambar_produk' => 'required|',
         ]);
-        if($validate->fails()){
-            return response(['message' => $validate->errors()], 400);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 400);
         }
 
-        // Get user info
-        // $user = Auth::user();
-        // if (!$user) {
-        //     return response()->json(['message' => 'User Not Found!'], 404);
-        // }
+        $uploadFolder = 'produk';
+        $image = $request->file('gambar_produk');
+        $image_uploaded_path = $image->store($uploadFolder, 'public');
+        $uploadedImageResponse = basename($image_uploaded_path);
 
         $storeData['gambar_produk'] = $uploadedImageResponse;
 
@@ -55,26 +70,8 @@ class ProdukController extends Controller
             'message' => 'Product Added Successfully!',
             'data' => $produk,
         ], 201);
-    }
-
-    public function update(Request $request, string $id){
-        $produk = Produk::findOrFail($id);
-
-        $updateData = $request->all();
-        
-        $validate = Validator::make($updateData, [
-            'gambar_produk' => 'nullable|image:jpeg,png,jpg,gif,svg|max:2048',
-            'nama' => 'required',
-            'harga' => 'required|numeric',
-            'kategori' => 'required|in:Kucing,Anjing,Hewan Kecil,Reptil,Unggas',
-            'deskripsi' => 'required',
-            'stok' => 'required',
-        ]);
-        if($validate->fails()){
-            return response(['message' => $validate->errors()], 400);
-        }
-
-        if($request->hasFile('gambar_produk')){
+        // Handle image upload
+        if ($request->hasFile('gambar_produk')) {
             $uploadFolder = 'produk';
             $image = $request->file('gambar_produk');
             $imagePath = $image->store($uploadFolder, 'public');
