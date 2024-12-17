@@ -11,3 +11,9 @@ Route::get('/user', function (Request $request) {
 Route::post('/register', [UserController::class, 'register']);
 
 Route::post('/login', [UserController::class, 'login']);
+
+Route::get('/Home', [ProdukController::class, 'home'])->name('home');
+Route::get('/beli/{id}', function ($id) {
+    $item = Produk::findOrFail($id); // Cari produk berdasarkan ID
+    return view('beli', ['item' => $item]);
+});

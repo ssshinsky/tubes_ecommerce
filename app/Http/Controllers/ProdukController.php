@@ -19,6 +19,12 @@ class ProdukController extends Controller{
         ], 200);
     }
 
+    public function home(){
+        $produk = Produk::inRandomOrder()->get();
+
+        return view('Home', compact('produk'));
+    }
+
     public function show(string $id){
         $produk = Produk::findOrFail($id);
 
