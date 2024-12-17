@@ -294,14 +294,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($items as $item)
+
+                @if(session('message'))
+                    <div class="alert alert-success">
+                        {{ session('message') }}
+                    </div>
+                @endif
+                    @foreach($produk as $item)
                     <tr>
-                        <td>{{ $item->nama_barang }}</td>
+                        <td>{{ $item->nama }}</td>
                         <td>{{ $item->kategori }}</td>
                         <td>{{ $item->deskripsi }}</td>
                         <td>
-                            @if($item->gambar)
-                            <img src="{{ asset('storage/' . $item->gambar) }}" alt="{{ $item->nama_barang }}" width="50">
+                            @if($item->gambar_produk)
+                            <img src="{{ $item->gambar_produk }}" alt="{{ $item->nama }}" width="100">
+
                             @else
                             -
                             @endif
@@ -323,8 +330,8 @@
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="mb-3">
-                                                    <label for="nama_barang" class="form-label">Nama Barang</label>
-                                                    <input type="text" class="form-control" id="nama_barang" name="nama_barang" value="{{ $item->nama_barang }}" required>
+                                                    <label for="nama" class="form-label">Nama Barang</label>
+                                                    <input type="text" class="form-control" id="nama" name="nama" value="{{ $item->nama}}" required>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="kategori" class="form-label">Kategori</label>
@@ -336,9 +343,10 @@
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="gambar" class="form-label">Gambar</label>
-                                                    <input type="file" class="form-control" id="gambar" name="gambar">
-                                                    @if($item->gambar)
-                                                    <img src="{{ asset('storage/' . $item->gambar) }}" alt="{{ $item->nama_barang }}" width="50" class="mt-2">
+                                                    <input type="file" class="form-control" id="gambar_produk" name="gambar_produk">
+                                                    @if($item->gambar_produk)
+                                                    <img src="{{ asset('storage/' . $item->gambar_produk) }}" alt="{{ $item->nama }}" width="50">
+
                                                     @endif
                                                 </div>
                                                 <div class="mb-3">
@@ -363,7 +371,7 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            Apakah Anda yakin ingin menghapus barang <strong>{{ $item->nama_barang }}</strong>?
+                                            Apakah Anda yakin ingin menghapus barang <strong>{{ $item->nama}}</strong>?
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -395,7 +403,7 @@
                         @csrf
                         <div class="mb-3">
                             <label for="nama_barang" class="form-label">Nama Barang</label>
-                            <input type="text" class="form-control" id="nama_barang" name="nama_barang" required>
+                            <input type="text" class="form-control" id="nama" name="nama" required>
                         </div>
                         <div class="mb-3">
                             <label for="kategori" class="form-label">Kategori</label>
@@ -406,8 +414,8 @@
                             <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3" required></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="gambar" class="form-label">Gambar</label>
-                            <input type="file" class="form-control" id="gambar" name="gambar">
+                            <label for="gambar_produk" class="form-label">Gambar</label>
+                            <input type="file" class="form-control" id="gambar_produk" name="gambar_produk">
                         </div>
                         <div class="mb-3">
                             <label for="harga" class="form-label">Harga</label>
