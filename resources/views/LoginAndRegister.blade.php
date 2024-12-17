@@ -4,6 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>Login and Register</title>
 
         <link rel="stylesheet" href="{{ asset('css/loginAndRegister.css') }}">
@@ -55,70 +56,78 @@
             </div>
 
             <script>
-                // Script untuk handle submit form register (AJAX)
+                function getHeaders() {
+                    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    return {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': token
+                    };
+                }
+
+                // Script untuk handle submit 
                 document.getElementById('registerForm').addEventListener('submit', function(e) {
-                        e.preventDefault();
+                    e.preventDefault();
+                    let formData = new FormData(this);
+                    let data = {};
 
-                        let formData = new FormData(this);
-                        let data = {};
+                    formData.forEach((value, key) => {
+                        data[key] = value;
+                    });
 
-                        formData.forEach((value, key) => {
-                            data[key] = value;
-                        });
-
-                        fetch('/api/register', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(data),
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.message === 'Registrasi berhasil!') {
-                                alert(data.message); // Menampilkan pesan sukses
-                                window.location.href = '/register'; // Redirect ke halaman registrasi
-                            } else {
-                                alert(data.message); // Menampilkan pesan error jika ada
-                            }
+                    fetch('/api/register', {
+                        method: 'POST',
+                        headers: getHeaders(),
+                        body: JSON.stringify(data),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message); 
+                        if (data.message.includes('Registrasi berhasil')) {
+                            this.reset();
+                            window.location.href = '/login'; 
+                        }
                     })
                     .catch(error => {
                         console.error('Error:', error);
+                        alert('Registrasi gagal: ' + error.message); 
                     });
                 });
 
-                // Script untuk handle submit form login (AJAX)
+                // Script untuk handle submit 
                 document.getElementById('loginForm').addEventListener('submit', function(e) {
-                    e.preventDefault(); // Mencegah form untuk reload halaman
-
+                    e.preventDefault();
                     let formData = new FormData(this);
                     let data = {};
-                    
+
                     formData.forEach((value, key) => {
                         data[key] = value;
                     });
 
                     fetch('/api/login', {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
+                        headers: getHeaders(),
                         body: JSON.stringify(data),
                     })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) throw new Error('Username atau password salah, silahkan coba lagi');
+                        return response.json();
+                    })
                     .then(data => {
-                        if (data.message === 'Authenticated') {
-                            alert(data.message); // Menampilkan pesan sukses
-                            window.location.href = '/Home'; // Redirect ke halaman Home setelah login berhasil
+                        console.log(data);  
+                        if (data.message) {
+                            window.location.href = '/Home'; 
                         } else {
-                            alert(data.message); // Menampilkan pesan error jika ada
+                            alert(data.message); 
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
+                        alert(error.message); 
                     });
                 });
             </script>
+
+
 
             <div class="toggle-container">
                 <div class="toggle">

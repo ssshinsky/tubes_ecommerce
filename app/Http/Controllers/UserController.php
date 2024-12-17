@@ -31,32 +31,33 @@ class UserController extends Controller{
 
         $user = User::create($registrationData);
 
-        return redirect()->route('loginAndRegister')->with('success', 'Registrasi berhasil!');
-    }
+        return response()->json([
+            'message' => 'Registration successful!',
+            'user' => $user
+        ], 201);    }
 
     public function showLoginForm()
     {
         return view('login'); // Halaman login, sesuaikan dengan view Anda
     }
     public function login(Request $request){
-        $loginData = $request->all();
-
-        $validate = Validator::make($loginData, [
-            'email' => 'required|email:rfc,dns',
-            'password' => 'required|min:8',
+        $loginData = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
         ]);
-        if($validate->fails()) {
-            return response(['message' => $validate->errors()->first()], 400);
+    
+        if (!Auth::attempt($loginData)) {
+            return response()->json(['message' => 'Invalid credentials provided'], 401);
         }
-
-        if(!Auth::attempt($loginData)){
-            return response(['message' => 'Invalid email & password match'], 401);
-        }
-
+    
         $user = Auth::user();
-        $token = $user->createToken('Authentication Token')->accessToken;
-
-        return redirect()->route('/Home')->with('success', 'Registrasi berhasil!');
+        $token = $user->createToken('Authentication Token')->plainTextToken;
+    
+        return response()->json([
+            'message' => 'Authenticated',
+            'user' => $user,
+            'token' => $token
+        ]);
     }
 
     public function logout(Request $request){
