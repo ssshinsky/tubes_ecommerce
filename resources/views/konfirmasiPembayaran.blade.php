@@ -222,7 +222,7 @@
             <div class="admin-info">
                 <a href="{{ url('/dashboard') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center;">
                 <img src="{{ asset('images/adminprofile.png') }}" alt="Admin Avatar" class="admin-avatar">
-                <p>Admin123</p>
+                <p>Admin</p>
             </div>
             <div class="admin-info" style="background-color: #b3b792; margin-top: 10px;">
                 <a href="{{ url('/konfirmasiPembayaran') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center;">

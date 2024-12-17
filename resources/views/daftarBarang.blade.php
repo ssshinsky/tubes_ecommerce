@@ -246,7 +246,7 @@
             <div class="admin-info">
                 <a href="{{ url('/dashboard') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center;">
                 <img src="{{ asset('images/adminprofile.png') }}" alt="Admin Avatar" class="admin-avatar">
-                <p>Admin123</p>
+                <p>Admin</p>
             </div>
             <div class="admin-info" style="background-color: #b3b792; margin-top: 10px;">
                 <a href="{{ url('/konfirmasiPembayaran') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center;">
@@ -434,26 +434,26 @@
     </div>
     <script>
         document.getElementById('barangForm').addEventListener('submit', function(e) {
-        e.preventDefault();  // Mencegah form reload halaman
+        e.preventDefault();  
 
-        let formData = new FormData(this);  // Ambil data form, termasuk file
+        let formData = new FormData(this);  
 
-        fetch('/api/produk', {  // Pastikan URL API sesuai
+        fetch('/api/produk', {  
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             },
-            body: formData,  // Kirim data sebagai FormData, bukan JSON
+            body: formData,  
         })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Gagal menambahkan produk');
             }
-            return response.text();  // Mengambil response dalam bentuk plain text
+            return response.text(); 
         })
         .then(responseText => {
-            alert(responseText);  // Menampilkan pesan sukses
-            location.reload();  // Halaman akan reload otomatis
+            alert(responseText);  
+            location.reload();  
         })
         .catch(error => {
             console.error('Error:', error);
@@ -465,14 +465,14 @@
     form.addEventListener('submit', function (e) {
         e.preventDefault();
 
-        let formData = new FormData(this);  // Ambil data form
-        let id = this.getAttribute('data-id');  // Ambil ID barang dari form
+        let formData = new FormData(this);  
+        let id = this.getAttribute('data-id');  
 
-        fetch(`/api/produk/${id}`, {  // API endpoint dengan ID produk
+        fetch(`/api/produk/${id}`, {  
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                'X-HTTP-Method-Override': 'PUT',  // Laravel butuh ini untuk PUT
+                'X-HTTP-Method-Override': 'PUT',  
             },
             body: formData
         })
@@ -481,7 +481,7 @@
             return response.text();
         })
         .then(responseText => {
-            alert(responseText);  // Tampilkan pesan sukses
+            alert(responseText);  
             location.reload();
         })
         .catch(error => {
@@ -491,12 +491,11 @@
     });
 });
 
-// Hapus Barang
 document.querySelectorAll('.deleteForm').forEach(form => {
     form.addEventListener('submit', function (e) {
         e.preventDefault();
 
-        let id = this.getAttribute('data-id');  // Ambil ID produk dari form
+        let id = this.getAttribute('data-id');  
 
         fetch(`/api/produk/${id}`, {
             method: 'DELETE',
@@ -509,7 +508,7 @@ document.querySelectorAll('.deleteForm').forEach(form => {
             return response.text();
         })
         .then(responseText => {
-            alert(responseText);  // Tampilkan pesan sukses
+            alert(responseText);  
             location.reload();
         })
         .catch(error => {

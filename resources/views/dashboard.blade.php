@@ -289,7 +289,7 @@
     <div class="card" id="totalUserCard">
     <img src="{{ asset('images/totalMember.png') }}" alt="Total Member" class="icon">
     <h5>Total Member</h5>
-    <p id="totalUsers">Loading...</p>
+    <p id="totalUsers">Loading...</p> <!-- Tempat untuk menampilkan total user -->
 </div>
         <div class="card {{ request()->is('barangterjual') ? 'active' : '' }}" onclick="window.location.href='{{ url('/barangterjual') }}'">
             <a href="/barangterjual" style="text-decoration: none; color: inherit;">
@@ -333,6 +333,7 @@
             </tr>
         </thead>
         <tbody id="userTableBody">
+            <!-- Data dari API akan ditampilkan di sini -->
         </tbody>
     </table>
 </div>
@@ -353,7 +354,8 @@
     
     document.addEventListener('DOMContentLoaded', function () {
     const userTable = document.getElementById('userTableBody');
-er
+
+    // Fetch data user
     fetch('/api/users', {
         method: 'GET',
         headers: {
@@ -365,7 +367,7 @@ er
         return response.json();
     })
     .then(data => {
-        userTable.innerHTML = ''; 
+        userTable.innerHTML = ''; // Bersihkan table sebelum isi
         data.users.forEach(user => {
             userTable.innerHTML += `
                 <tr>
@@ -385,6 +387,7 @@ er
         alert('Gagal memuat data user: ' + error.message);
     });
 
+    // Handle delete user
     userTable.addEventListener('click', function (e) {
         if (e.target.classList.contains('deleteBtn')) {
             const userId = e.target.getAttribute('data-id');
@@ -413,7 +416,7 @@ er
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    fetch('/api/users/total', { 
+    fetch('/api/users/total', { // URL API
         method: 'GET',
         headers: {
             'Accept': 'application/json'
@@ -421,16 +424,17 @@ document.addEventListener('DOMContentLoaded', function () {
     })
     .then(response => {
         if (!response.ok) throw new Error('Gagal mengambil total user');
-        return response.json(); 
+        return response.json(); // Mengubah response ke JSON
     })
     .then(data => {
-        document.getElementById('totalUsers').innerText = data.totalUsers; 
+        document.getElementById('totalUsers').innerText = data.totalUsers; // Menampilkan total user
     })
     .catch(error => {
         console.error('Error:', error);
-        document.getElementById('totalUsers').innerText = 'Gagal memuat data';
+        document.getElementById('totalUsers').innerText = 'Error';
     });
 });
+    // Panggil fetchUsers saat halaman dimuat
     document.addEventListener('DOMContentLoaded', fetchUsers);
     
 </script>
