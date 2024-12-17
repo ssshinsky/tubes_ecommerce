@@ -4,9 +4,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProdukController;
 
-Route::put('/produk/{id}', [ProdukController::class, 'update'])->name('daftarBarang.update');
-Route::delete('/produk/{id}', [ProdukController::class, 'destroy'])->name('daftarBarang.destroy');
-Route::post('/produk', [ProdukController::class, 'store'])->name('daftarBarang.store');
+
 Route::get('/daftarBarang', [ProdukController::class, 'index'])->name('daftarBarang.index');
 
 Route::get('/daftarBarang', function (){

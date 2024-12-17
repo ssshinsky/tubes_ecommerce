@@ -29,7 +29,6 @@ class ProdukController extends Controller
 
     public function store(Request $request)
     {
-        // Validate incoming request
         $validator = Validator::make($request->all(), [
             'nama' => 'required|string|max:255',
             'harga' => 'required|numeric',
@@ -39,7 +38,6 @@ class ProdukController extends Controller
             'gambar_produk' => 'required|',
         ]);
 
-        // Check validation result
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation failed',
@@ -108,11 +106,7 @@ class ProdukController extends Controller
             $produk->gambar_produk = $imageFileName;
         }
         $produk->update($request->except(['gambar_produk']));
-
-        return response()->json([
-            'message' => 'Product Updated Successfully!',
-            'data' => $produk
-        ], 200);
+        return response('Produk berhasil di update!', 200);
     }
 
     public function destroy($id)
@@ -122,15 +116,9 @@ class ProdukController extends Controller
             Storage::disk('public')->delete('produk/' . $produk->gambar_produk);
         }
         if ($produk->delete()) {
-            return response()->json([
-                'message' => 'Product Deleted Successfully!',
-                'data' => $produk
-            ], 200);
+            return response('Produk berhasil di delete!', 200);
         }
+        
 
-        return response()->json([
-            'message' => 'Delete Product Failed!',
-            'data' => null
-        ], 400);
     }
 }

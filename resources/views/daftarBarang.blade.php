@@ -327,7 +327,7 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="{{ route('daftarBarang.update', $item->id) }}" method="POST" enctype="multipart/form-data">
+                                            <form class="editForm" data-id="{{ $item->id }}" method="POST" enctype="multipart/form-data">
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="mb-3">
@@ -376,7 +376,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                            <form action="{{ route('daftarBarang.destroy', $item->id) }}" method="POST" style="display: inline;">
+                                            <form class="deleteForm" data-id="{{ $item->id }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger">Hapus</button>
@@ -460,6 +460,65 @@
             alert('Terjadi kesalahan: ' + error.message);
         });
     });
+
+    document.querySelectorAll('.editForm').forEach(form => {
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        let formData = new FormData(this);  // Ambil data form
+        let id = this.getAttribute('data-id');  // Ambil ID barang dari form
+
+        fetch(`/api/produk/${id}`, {  // API endpoint dengan ID produk
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'X-HTTP-Method-Override': 'PUT',  // Laravel butuh ini untuk PUT
+            },
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Gagal mengedit produk');
+            return response.text();
+        })
+        .then(responseText => {
+            alert(responseText);  // Tampilkan pesan sukses
+            location.reload();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan: ' + error.message);
+        });
+    });
+});
+
+// Hapus Barang
+document.querySelectorAll('.deleteForm').forEach(form => {
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        let id = this.getAttribute('data-id');  // Ambil ID produk dari form
+
+        fetch(`/api/produk/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            }
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Gagal menghapus produk');
+            return response.text();
+        })
+        .then(responseText => {
+            alert(responseText);  // Tampilkan pesan sukses
+            location.reload();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan: ' + error.message);
+        });
+    });
+});
+
 
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
