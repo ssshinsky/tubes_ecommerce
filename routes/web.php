@@ -1,7 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\daftarBarangController;
+use App\Http\Controllers\ProdukController;
+
+Route::put('/produk/{id}', [ProdukController::class, 'update'])->name('daftarBarang.update');
+Route::delete('/produk/{id}', [ProdukController::class, 'destroy'])->name('daftarBarang.destroy');
+Route::post('/produk', [ProdukController::class, 'store'])->name('daftarBarang.store');
+Route::get('/daftarBarang', [ProdukController::class, 'index'])->name('daftarBarang.index');
+
+Route::get('/daftarBarang', function (){
+    return view('daftarBarang');
+});
 
 Route::get('/', function () {
     return view('loginAndRegister');
@@ -111,44 +120,45 @@ Route::get('/rating', function () {
     return view('rating', ['ratings' => $ratings]); 
 });
 
-Route::get('/daftarBarang', function () {
-    $items = [
-        (object)[
-            'id' => 1,
-            'nama_barang' => 'Beauty Cat Food 1kg',
-            'kategori' => 'Makanan Kucing',
-            'harga' => 27231,
-            'stok' => 50,
-        ],
-        (object)[
-            'id' => 2,
-            'nama_barang' => 'Cat Toy',
-            'kategori' => 'Mainan Kucing',
-            'harga' => 15000,
-            'stok' => 100,
-        ],
-        (object)[
-            'id' => 3,
-            'nama_barang' => 'Cat Shampoo 500ml',
-            'kategori' => 'Perawatan Kucing',
-            'harga' => 75000,
-            'stok' => 30,
-        ],
-        (object)[
-            'id' => 4,
-            'nama_barang' => 'Cat Litter 5kg',
-            'kategori' => 'Perawatan Kucing',
-            'harga' => 120000,
-            'stok' => 20,
-        ],
-    ];
+// Route::get('/daftarBarang', function () {
+//     $items = [
+//         (object)[
+//             'id' => 1,
+//             'nama_barang' => 'Beauty Cat Food 1kg',
+//             'kategori' => 'Makanan Kucing',
+//             'harga' => 27231,
+//             'stok' => 50,
+//         ],
+//         (object)[
+//             'id' => 2,
+//             'nama_barang' => 'Cat Toy',
+//             'kategori' => 'Mainan Kucing',
+//             'harga' => 15000,
+//             'stok' => 100,
+//         ],
+//         (object)[
+//             'id' => 3,
+//             'nama_barang' => 'Cat Shampoo 500ml',
+//             'kategori' => 'Perawatan Kucing',
+//             'harga' => 75000,
+//             'stok' => 30,
+//         ],
+//         (object)[
+//             'id' => 4,
+//             'nama_barang' => 'Cat Litter 5kg',
+//             'kategori' => 'Perawatan Kucing',
+//             'harga' => 120000,
+//             'stok' => 20,
+//         ],
+//     ];
 
-    return view('daftarBarang', ['items' => $items]);
-});
+//     return view('daftarBarang', ['items' => $items]);
+// });
+Route::get('/daftarBarang', [ProdukController::class, 'index'])->name('produk.index');
 
 
-Route::get('/daftarBarang', [daftarBarangController::class, 'index'])->name('daftarBarang.index');
-Route::post('/daftarBarang', [daftarBarangController::class, 'store'])->name('daftarBarang.store');
-Route::delete('/daftarBarang/{id}', [daftarBarangController::class, 'destroy'])->name('daftarBarang.destroy');
-Route::get('/daftarBarang/{id}/edit', [daftarBarangController::class, 'edit'])->name('daftarBarang.edit');
-Route::put('/daftarBarang/{id}', [daftarBarangController::class, 'update'])->name('daftarBarang.update');
+// Route::get('/daftarBarang', [daftarBarangController::class, 'index'])->name('daftarBarang.index');
+// Route::post('/daftarBarang', [daftarBarangController::class, 'store'])->name('daftarBarang.store');
+// Route::delete('/daftarBarang/{id}', [daftarBarangController::class, 'destroy'])->name('daftarBarang.destroy');
+// Route::get('/daftarBarang/{id}/edit', [daftarBarangController::class, 'edit'])->name('daftarBarang.edit');
+// Route::put('/daftarBarang/{id}', [daftarBarangController::class, 'update'])->name('daftarBarang.update');
