@@ -340,28 +340,34 @@
                 </div>
             </div>
         </div>
+        
         <div class="recomendation">
             <img src="images/rekomendasi.png" class="text4" alt="text rekomendasi">
-        </div>         
-        <p class="line"> .</p>  
-        <div class="products">
-            @if($produk->isNotEmpty())
-                @foreach ($produk as $item)
-                <a href="{{ url('/beli', ['id' => $item->id]) }}">
-                    <div class='product-card'>
-                        <img src="{{ asset('storage/' . $item->gambar_produk) }}" alt="{{ $item->nama }}" >
-                        <h2>Rp {{ number_format($item->harga, 0, ',', '.') }}</h2>
-                        <p>{{ $item->nama }}</p>
-                        <p>⭐⭐⭐⭐⭐ reviews</p>
-                    </div>
-                        </a>
-                @endforeach
-            @else
-                <p>Tidak ada produk yang tersedia.</p>
-            @endif
         </div>
+
+        <p class="line"> .</p>
+            <div class="products">
+                @if($produk->isNotEmpty())
+                    @foreach ($produk as $item)
+                    <a href="{{ url('/beli', ['id' => $item->id]) }}">
+                        <div class='product-card'>
+                            @if($item->gambar_produk)
+                                <img src="{{ $item->gambar_produk }}" alt="{{ $item->nama }}" width="100">
+                                @else
+                                -
+                            @endif
+                            
+                            <h2>Rp {{ number_format($item->harga, 0, ',', '.') }}</h2>
+                            <p>{{ $item->nama }}</p>
+                            <p>⭐⭐⭐⭐⭐ reviews</p>
+                        </div>
+                    </a>
+                    @endforeach
+                @else
+                    <p>Tidak ada produk yang tersedia.</p>
+                @endif
+            </div>
         </div>
-        
     </div>
     
     <div class="center-container">

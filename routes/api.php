@@ -7,8 +7,6 @@ use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ProdukController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [UserController::class, 'register'])->name('register');
