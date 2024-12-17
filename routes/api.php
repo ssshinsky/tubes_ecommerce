@@ -15,7 +15,7 @@ Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
 
 Route::get('/produk', [ProdukController::class, 'index']);
-Route::post('produk', [ProdukController::class, 'store']);
+Route::post('/produk', [ProdukController::class, 'store'])->name('daftarBarang.store');
 Route::get('produk/{id}', [ProdukController::class, 'show']);
 Route::put('produk/{id}', [ProdukController::class, 'update']);
 Route::delete('produk/{id}', [ProdukController::class, 'destroy']);

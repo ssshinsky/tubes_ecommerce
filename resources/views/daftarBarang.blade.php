@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Daftar Barang</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -399,7 +400,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('daftarBarang.store') }}" method="POST" enctype="multipart/form-data">
+                    <form id="barangForm" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
                             <label for="nama_barang" class="form-label">Nama Barang</label>
@@ -431,6 +432,36 @@
             </div>
         </div>
     </div>
+    <script>
+        document.getElementById('barangForm').addEventListener('submit', function(e) {
+        e.preventDefault();  // Mencegah form reload halaman
+
+        let formData = new FormData(this);  // Ambil data form, termasuk file
+
+        fetch('/api/produk', {  // Pastikan URL API sesuai
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            },
+            body: formData,  // Kirim data sebagai FormData, bukan JSON
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Gagal menambahkan produk');
+            }
+            return response.text();  // Mengambil response dalam bentuk plain text
+        })
+        .then(responseText => {
+            alert(responseText);  // Menampilkan pesan sukses
+            location.reload();  // Halaman akan reload otomatis
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan: ' + error.message);
+        });
+    });
+
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.getElementById('sidebarToggle').addEventListener('click', function() {

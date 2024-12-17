@@ -72,10 +72,7 @@ class ProdukController extends Controller
             'gambar_produk' => $imageFileName,
         ]);
 
-        return response()->json([
-            'message' => 'Product Added Successfully!',
-            'data' => $produk
-        ], 201);
+        return response('Produk berhasil ditambahkan!', 200);
     }
 
     public function update(Request $request, $id)
