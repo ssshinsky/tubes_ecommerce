@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller ;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -49,8 +49,20 @@ class UserController extends Controller{
             'email' => 'required|string|email',
             'password' => 'required|min:8',
         ]);
+
         if($validate->fails()){
             return response(['message' => $validate->errors()->first()], 400);
+        }
+
+        if($loginData['email'] === 'admin@gmail.com' && $loginData['password'] === 'admin123'){
+            $adminToken = 'admin-special-token';
+
+            return response([
+                'message' => 'Admin Authenticated',
+                'redirect' => '/dashboard',
+                'token_type' => 'Bearer',
+                'access_token' => $adminToken
+            ]);
         }
 
         if(!Auth::attempt($loginData)){
@@ -62,6 +74,7 @@ class UserController extends Controller{
 
         return response([
             'message' => 'Authenticated',
+            'redirect' => '/Home',
             'user' => $user,
             'token_type' => 'Bearer',
             'access_token' => $token
@@ -104,35 +117,33 @@ class UserController extends Controller{
         ]);
     }
 
-    public function updateProfilePicture(Request $request)
-    {
-        // Validate the uploaded file
+    public function updateProfilePicture(Request $request){
         $request->validate([
             'profile_picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-    
+
         $user = Auth::user();
-    
-        if ($request->hasFile('profile_picture')) {
+
+        if($request->hasFile('profile_picture')){
             $uploadFolder = 'user';
             $image = $request->file('profile_picture');
-    
+
             $image_uploaded_path = $image->store($uploadFolder, 'public');
             $uploadedImageResponse = basename($image_uploaded_path);
 
-            if ($user->profile_picture) {
+            if($user->profile_picture){
                 Storage::disk('public')->delete('user/' . $user->profile_picture);
             }
 
             $user->profile_picture = $uploadedImageResponse;
             $user->save();
-    
+
             return response([
                 'message' => 'User Profile Updated Successfully!',
                 'data' => $user,
             ], 200);
         }
-    
+
         return response()->json(['error' => 'File upload failed'], 400);
     }
 
@@ -143,4 +154,47 @@ class UserController extends Controller{
             'message' => 'Logged out'
         ]);
     }
+
+    public function getAllUsers()
+    {
+        $users = User::all(['id', 'nama', 'email', 'alamat', 'no_telp']);
+        return response([
+            'message' => 'User list retrieved successfully',
+            'users' => $users
+        ], 200);
+    }
+
+    public function index()
+    {
+         $users = User::all(); 
+        return view('dashboard', compact('users'));
+    }
+    
+    public function getTotalUsers()
+    {
+        try {
+            $totalUsers = User::count();
+            return response()->json([
+                'message' => 'Total users retrieved successfully',
+                'totalUsers' => $totalUsers
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function deleteUser($id)
+    {
+        $user = User::find($id);
+    
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+    
+        $user->delete();
+    
+        return response()->json(['message' => 'User deleted successfully'], 200);
+    }
+    
+
 }

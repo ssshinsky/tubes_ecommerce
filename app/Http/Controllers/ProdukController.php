@@ -2,51 +2,58 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Produk;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class ProdukController extends Controller{
     public function index(){
-        $produk = Produk::inRandomOrder()->get();
-
-        return response([
-            'message' => 'All Products Retrieved!',
-            'data' => $produk
-        ], 200);
+        $produk = Produk::all(); 
+        return view('daftarBarang', compact('produk'));
     }
 
-    public function show(string $id){
-        $produk = Produk::findOrFail($id);
 
-        return response([
+    public function home(){
+        $produk = Produk::inRandomOrder()->get();
+
+        return view('Home', compact('produk'));
+    }
+
+    public function kucing(){
+        $produk = Produk::inRandomOrder()->get();
+
+        return view('kucing', compact('produk'));
+    }
+
+    public function show($id)
+    {
+        $produk = Produk::findOrFail($id); 
+
+        return response()->json([
             'message' => 'Product Found!',
             'data' => $produk
         ], 200);
     }
 
-    public function store(Request $request){
-        $storeData = $request->all();
-
-        $validate = Validator::make($storeData, [
-            'gambar_produk' => 'required|image:jpeg,png,jpg,gif,svg|max:2048',
-            'nama' => 'required',
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nama' => 'required|string|max:255',
             'harga' => 'required|numeric',
             'kategori' => 'required|in:Kucing,Anjing,Hewan Kecil,Reptil,Unggas',
-            'deskripsi' => 'required',
-            'stok' => 'required',
+            'deskripsi' => 'required|string',
+            'stok' => 'required|numeric',
+            'gambar_produk' => 'required|',
         ]);
-        if($validate->fails()){
-            return response(['message' => $validate->errors()], 400);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 400);
         }
-        
-        // $user = Auth::user();
-        // if(!$user){
-        //     return response(['message' => 'User Not Found!'], 404);
-        // }
 
         $uploadFolder = 'produk';
         $image = $request->file('gambar_produk');
@@ -54,7 +61,6 @@ class ProdukController extends Controller{
         $uploadedImageResponse = basename($image_uploaded_path);
 
         $storeData['gambar_produk'] = $uploadedImageResponse;
-        // $storeData['id_user'] = $user->id;
 
         $produk = Produk::create($storeData);
 
@@ -62,57 +68,70 @@ class ProdukController extends Controller{
             'message' => 'Product Added Successfully!',
             'data' => $produk,
         ], 201);
-    }
-
-    public function update(Request $request, string $id){
-        $produk = Produk::findOrFail($id);
-
-        $updateData = $request->all();
-        
-        $validate = Validator::make($updateData, [
-            'gambar_produk' => 'nullable|image:jpeg,png,jpg,gif,svg|max:2048',
-            'nama' => 'required',
-            'harga' => 'required|numeric',
-            'kategori' => 'required|in:Kucing,Anjing,Hewan Kecil,Reptil,Unggas',
-            'deskripsi' => 'required',
-            'stok' => 'required',
-        ]);
-        if($validate->fails()){
-            return response(['message' => $validate->errors()], 400);
-        }
-
-        if($request->hasFile('gambar_produk')){
+        // Handle image upload
+        if ($request->hasFile('gambar_produk')) {
             $uploadFolder = 'produk';
             $image = $request->file('gambar_produk');
-            $image_uploaded_path = $image->store($uploadFolder, 'public');
-            $uploadedImageResponse = basename($image_uploaded_path);
-
-            Storage::disk('public')->delete('produk/'.$produk->gambar_produk);
-
-            $updateData['gambar_produk'] = $uploadedImageResponse;
+            $imagePath = $image->store($uploadFolder, 'public');
+            $imageFileName = basename($imagePath);
+        } else {
+            $imageFileName = null;
         }
+        // Store product data
+        $produk = Produk::create([
+            'nama' => $request->nama,
+            'harga' => $request->harga,
+            'kategori' => $request->kategori,
+            'deskripsi' => $request->deskripsi,
+            'stok' => $request->stok,
+            'gambar_produk' => $imageFileName,
+        ]);
 
-        $produk->update($updateData);
-
-        return response([
-            'message' => 'Product Updated Successfully!',
-            'data' => $produk,
-        ], 200);
+        return response('Produk berhasil ditambahkan!', 200);
     }
 
-    public function destroy(string $id){
+    public function update(Request $request, $id){
         $produk = Produk::findOrFail($id);
-        
-        if($produk->delete()){
-            return response([
-                'message' => 'Product Deleted Successfully!',
-                'data' => $produk,
-            ], 200);
+
+        $validator = Validator::make($request->all(), [
+            'nama' => 'required|string|max:255',
+            'harga' => 'required|numeric',
+            'kategori' => 'required|in:Kucing,Anjing,Hewan Kecil,Reptil,Unggas',
+            'deskripsi' => 'required|string',
+            'stok' => 'required|numeric',
+            'gambar_produk' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 400);
         }
 
-        return response([
-            'message' => 'Delete Product Failed!',
-            'data' => null,
-        ], 400);
+        if ($request->hasFile('gambar_produk')) {
+            $uploadFolder = 'produk';
+            $image = $request->file('gambar_produk');
+            $imagePath = $image->store($uploadFolder, 'public');
+            $imageFileName = basename($imagePath);
+            if ($produk->gambar_produk) {
+                Storage::disk('public')->delete('produk/' . $produk->gambar_produk);
+            }
+            $produk->gambar_produk = $imageFileName;
+        }
+        $produk->update($request->except(['gambar_produk']));
+        return response('Produk berhasil di update!', 200);
+    }
+
+    public function destroy($id)
+    {
+        $produk = Produk::findOrFail($id);
+        if($produk->gambar_produk){
+            Storage::disk('public')->delete('produk/' . $produk->gambar_produk);
+        }
+        
+        if($produk->delete()){
+            return response('Produk berhasil di delete!', 200);
+        }
     }
 }

@@ -9,6 +9,8 @@
 
         <link rel="stylesheet" href="{{ asset('css/loginAndRegister.css') }}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.js"></script>
     </head>
 
     <body>
@@ -25,7 +27,7 @@
                     </div>
 
                     <span class="title">or use your email account</span>
-                    <input type="text" name="nama" placeholder="Nama" required>
+                    <input type="text" name="nama" placeholder="nama" required>
                     <input type="number" name="no_telp" placeholder="Nomor Telepon" required>
                     <input type="text" name="alamat" placeholder="Alamat" required>
                     <input type="email" name="email" placeholder="Email" required>
@@ -45,7 +47,7 @@
                         <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
                         <a href="{{ url('dashboard') }}" class="icon"><i class="fa-solid fa-pen"></i></a>
                     </div>
-
+                    
                     <span class="title">or use your email account</span>
                     <input type="email" name="email" id="email" placeholder="Email" required>
                     <input type="password" name="password" id="password" placeholder="Password" required>
@@ -63,8 +65,7 @@
                     };
                 }
 
-                // Script untuk handle submit register
-                document.getElementById('registerForm').addEventListener('submit', function(e) {
+                document.getElementById('registerForm').addEventListener('submit', function(e){
                     e.preventDefault();
                     let formData = new FormData(this);
                     let data = {};
@@ -80,19 +81,44 @@
                     })
                     .then(response => response.json())
                     .then(data => {
-                        alert(data.message); 
-                        if(data.message === ('Register Success')){
+                        if(data.message === 'Register Success'){
+                            Toastify({
+                                text: `<i class="fa-solid fa-check-circle"></i> Registration successful!`,
+                                backgroundColor: "#28a745",
+                                duration: 3000,
+                                gravity: "top",
+                                position: "right",
+                                escapeMarkup: false,
+                            }).showToast();
+
                             this.reset();
-                            window.location.href = '/loginAndRegister'; 
+                            setTimeout(() => {
+                                window.location.href = '/loginAndRegister';
+                            }, 3000);
+                        }else{
+                            Toastify({
+                                text: `<i class="fa-solid fa-exclamation-circle"></i> Registration failed: ${data.message}`,
+                                backgroundColor: "#dc3545",
+                                duration: 3000,
+                                gravity: "top",
+                                position: "right",
+                                escapeMarkup: false,
+                            }).showToast();
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert('Registrasi failed: ' + error.message); 
+                        Toastify({
+                            text: `<i class="fa-solid fa-exclamation-triangle"></i> Registration failed: ${error.message}`,
+                            backgroundColor: "#dc3545",
+                            duration: 3000,
+                            gravity: "top",
+                            position: "right",
+                            escapeMarkup: false,
+                        }).showToast();
                     });
                 });
 
-                // Login {Updated by Arya}
                 document.getElementById('loginForm').addEventListener('submit', function(e){
                     e.preventDefault();
 
@@ -101,25 +127,61 @@
                         password: document.getElementById('password').value
                     };
 
-                    fetch('/login', {
+                    fetch('/api/login', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         },
-                        body: JSON.stringify(formData),
+                        body: JSON.stringify({
+                            email: document.getElementById('email').value,
+                            password: document.getElementById('password').value
+                        }),
                     })
                     .then(response => response.json())
                     .then(data => {
-                        if(data.message === 'Authenticated'){
+                        if(data.message === 'Admin Authenticated'){
                             localStorage.setItem('authToken', data.access_token);
-                            alert('Login Successful');
-                            window.location.href = '/Home';
+                            Toastify({
+                                text: `<i class="fa-solid fa-check-circle"></i> Welcome Admin!`,
+                                backgroundColor: "#28a745",
+                                duration: 3000,
+                                gravity: "top",
+                                position: "right",
+                                escapeMarkup: false,
+                            }).showToast();
+
+                            setTimeout(() => { 
+                                window.location.href = data.redirect;
+                            }, 3000);
+                        }else if(data.message === 'Authenticated'){
+                            localStorage.setItem('authToken', data.access_token);
+                            Toastify({
+                                text: `<i class="fa-solid fa-check-circle"></i> Login Successful!`,
+                                backgroundColor: "#28a745",
+                                duration: 3000,
+                                gravity: "top",
+                                position: "right",
+                                escapeMarkup: false,
+                            }).showToast();
+
+                            setTimeout(() => { 
+                                window.location.href = data.redirect;
+                            }, 3000);
                         }else{
-                            alert(data.message);
+                            throw new Error(data.message);
                         }
                     })
-                    .catch(error => console.error('Error:', error));
+                    .catch(error => {
+                        Toastify({
+                            text: `<i class="fa-solid fa-exclamation-triangle"></i> ${error.message}`,
+                            backgroundColor: "#dc3545",
+                            duration: 3000,
+                            gravity: "top",
+                            position: "right",
+                            escapeMarkup: false,
+                        }).showToast();
+                    });
                 });
             </script>
 

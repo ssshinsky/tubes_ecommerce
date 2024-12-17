@@ -124,49 +124,42 @@
         }
         ul {
             list-style: none;
-            padding: 0px;
+            padding: 0;
         }
         ul li {
-            padding-top: 20px;
             display: inline-block;
             position: relative;
-            z-index: 1;
         }
         ul li a {
             display: block;
             color: black;
             text-decoration: none;
+            padding: 20px 50px;
             text-align: center;
-            padding-left: 50px;
-        }
-        ul li ul.dropdown li {
-            display: block; 
         }
         ul li ul.dropdown {
-            width: 100%;
-            background: #f5f5f5;
             position: absolute;
             display: none;
+            background-color: #f5f5f5;
             border: 1px solid #ccc;
-        }
-        ul li ul.dropdown li a {
-            display: block;
-            color: black;
-            text-decoration: none;
-            text-align: left;
-            padding: 10px 15px; 
-            white-space: nowrap; 
-            transition: background-color 0.3s ease;
-        }
-        ul li a:hover {
-            background: #e5e0d8;
+            left: 0;
+            right: 0;
+            z-index: 1000;
         }
         ul li:hover ul.dropdown {
             display: block;
         }
+        ul li ul.dropdown li {
+            display: block;
+        }
+        ul li ul.dropdown li a {
+            padding: 10px 15px;
+            text-align: left;
+            white-space: nowrap;
+        }
         ul li ul.dropdown li a img {
-            width: 80px; 
             vertical-align: middle;
+            width: 80px;
         }
         .footer {
             margin-top: 50px;
@@ -250,7 +243,7 @@
     </div>
     <header>
         <div class="logo">
-            <a href="{{ url('Home') }}" target="_blank">
+            <a href="{{ url('Home') }}">
                 <img src="{{asset('/images/logonama.png')}}" alt="Logo Atma Petshop"/>
             </a>
         </div>
@@ -263,13 +256,13 @@
         </div>
         <div class="spacer"></div>
         <div class="user-action">
-            <a onclick="location.href='{{ url('profile') }}'" target="_blank">
+            <a onclick="location.href='{{ url('profile') }}'" >
                 <i class="bi bi-person" style="color: white"></i>
             </a>
             <a href="<?php echo '-'; ?>" target="_blank">
                 <i class="bi bi-heart" style="color: white"></i>
             </a>
-            <a onclick="location.href='{{ url('cart') }}'" target="_blank">
+            <a onclick="location.href='{{ url('cart') }}'">
                 <i class="bi bi-cart" style="color: white"></i>
             </a>
         </div>
