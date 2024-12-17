@@ -14,7 +14,7 @@
     <body>
         <div class="container" id="container">
             <div class="form-container sign-up">
-                <form id="registerForm" method="POST">
+                <form id="registerForm" method="POST" action="{{ url('/api/register') }}">
                     @csrf
                     <h1 class="title">Create Account</h1>
                     <div class="social-icons">
@@ -30,14 +30,12 @@
                     <input type="text" name="alamat" placeholder="Alamat" required>
                     <input type="email" name="email" placeholder="Email" required>
                     <input type="password" name="password" placeholder="Password" required>
-                    <button>
-                         Register
-                    </button>
+                    <button>Register</button>
                 </form>
             </div>  
             
             <div class="form-container sign-in">
-                <form id="loginForm">
+                <form id="loginForm" method="POST" action="{{ url('/api/login') }}">
                     @csrf
                     <h1 class="title">Login</h1>
                     <div class="social-icons">
@@ -47,24 +45,25 @@
                         <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
                         <a href="{{ url('dashboard') }}" class="icon"><i class="fa-solid fa-pen"></i></a>
                     </div>
+
                     <span class="title">or use your email account</span>
-                    <input type="email" name="email" placeholder="Email" required>
-                    <input type="password" name="password" placeholder="Password" required>
+                    <input type="email" name="email" id="email" placeholder="Email" required>
+                    <input type="password" name="password" id="password" placeholder="Password" required>
                     <a class="title" href="#">Forget Your Password?</a>
-                    <button>Log in</button>
+                    <button type="submit">Log in</button>
                 </form>
             </div>
 
             <script>
-                function getHeaders() {
+                function getHeaders(){
                     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                    return {
+                    return{
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': token
                     };
                 }
 
-                // Script untuk handle submit 
+                // Script untuk handle submit register
                 document.getElementById('registerForm').addEventListener('submit', function(e) {
                     e.preventDefault();
                     let formData = new FormData(this);
@@ -82,52 +81,47 @@
                     .then(response => response.json())
                     .then(data => {
                         alert(data.message); 
-                        if (data.message.includes('Registrasi berhasil')) {
+                        if(data.message === ('Register Success')){
                             this.reset();
-                            window.location.href = '/login'; 
+                            window.location.href = '/loginAndRegister'; 
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert('Registrasi gagal: ' + error.message); 
+                        alert('Registrasi failed: ' + error.message); 
                     });
                 });
 
-                // Script untuk handle submit 
-                document.getElementById('loginForm').addEventListener('submit', function(e) {
+                // Login {Updated by Arya}
+                document.getElementById('loginForm').addEventListener('submit', function(e){
                     e.preventDefault();
-                    let formData = new FormData(this);
-                    let data = {};
 
-                    formData.forEach((value, key) => {
-                        data[key] = value;
-                    });
+                    const formData = {
+                        email: document.getElementById('email').value,
+                        password: document.getElementById('password').value
+                    };
 
-                    fetch('/api/login', {
+                    fetch('/login', {
                         method: 'POST',
-                        headers: getHeaders(),
-                        body: JSON.stringify(data),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify(formData),
                     })
-                    .then(response => {
-                        if (!response.ok) throw new Error('Username atau password salah, silahkan coba lagi');
-                        return response.json();
-                    })
+                    .then(response => response.json())
                     .then(data => {
-                        console.log(data);  
-                        if (data.message) {
-                            window.location.href = '/Home'; 
-                        } else {
-                            alert(data.message); 
+                        if(data.message === 'Authenticated'){
+                            localStorage.setItem('authToken', data.access_token);
+                            alert('Login Successful');
+                            window.location.href = '/Home';
+                        }else{
+                            alert(data.message);
                         }
                     })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert(error.message); 
-                    });
+                    .catch(error => console.error('Error:', error));
                 });
             </script>
-
-
 
             <div class="toggle-container">
                 <div class="toggle">

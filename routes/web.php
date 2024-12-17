@@ -24,6 +24,7 @@ Route::view('/cart', 'cart');
 Route::view('/terima', 'terima');
 Route::view('/review', 'review');
 Route::view('/selesai', 'selesai');
+
 Route::get('/login', [UserController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [UserController::class, 'login']);
 Route::get('/register', [UserController::class, 'showRegisterForm'])->name('register');

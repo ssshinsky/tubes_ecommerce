@@ -63,6 +63,20 @@ class ProdukController extends Controller
         //     return response()->json(['message' => 'User Not Found!'], 404);
         // }
 
+        $uploadFolder = 'produk';
+        $image = $request->file('gambar_produk');
+        $image_uploaded_path = $image->store($uploadFolder, 'public');
+        $uploadedImageResponse = basename($image_uploaded_path);
+
+        $storeData['gambar_produk'] = $uploadedImageResponse;
+        // $storeData['id_user'] = $user->id;
+
+        $produk = Produk::create($storeData);
+
+        return response([
+            'message' => 'Product Added Successfully!',
+            'data' => $produk,
+        ], 201);
         // Handle image upload
         if ($request->hasFile('gambar_produk')) {
             $uploadFolder = 'produk';

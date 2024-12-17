@@ -28,8 +28,4 @@ class Pemesanan extends Model{
     public function produk(){
         return $this->belongsTo(Produk::class, 'id_produk');
     }
-
-    public function pemesanan(){
-        return $this->belongsTo(Pemesanan::class);
-    }
 }

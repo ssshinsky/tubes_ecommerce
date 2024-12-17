@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller ;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 
 class UserController extends Controller{
-    public function showRegisterForm()
-    {
+    public function showRegisterForm(){
         return view('loginAndRegister'); 
     }
 
@@ -19,7 +19,7 @@ class UserController extends Controller{
 
         $validate = Validator::make($registrationData, [
             'nama' => 'required|max:60',
-            'email' => 'required|email:rfc,dns|unique:user',
+            'email' => 'required|unique:users',
             'password' => 'required|min:8',
             'no_telp' => 'required|numeric',
             'alamat' => 'required',
@@ -30,40 +30,114 @@ class UserController extends Controller{
 
         $registrationData['password'] = bcrypt($request->password);
 
-        $user = User::create($registrationData);
+        $users = User::create($registrationData);
 
+        return response([
+            'message' => 'Register Success',
+            'user' => $users
+        ], 200);
+    }
+
+    public function showLoginForm(){
+        return view('loginAndRegister');
+    }
+
+    public function login(Request $request){
+        $loginData = $request->all();
+
+        $validate = Validator::make($loginData, [
+            'email' => 'required|string|email',
+            'password' => 'required|min:8',
+        ]);
+        if($validate->fails()){
+            return response(['message' => $validate->errors()->first()], 400);
+        }
+
+        if(!Auth::attempt($loginData)){
+            return response(['message' => 'Invalid email & password match'], 401);
+        }
+
+        $user = Auth::user();
+        $token = $user->createToken('Authentication Token')->plainTextToken;
+
+        return response([
+            'message' => 'Authenticated',
+            'user' => $user,
+            'token_type' => 'Bearer',
+            'access_token' => $token
+        ]);
+    }
+
+    public function showProfile(Request $request){
+        $user = Auth::user();
+
+        if(!$user){
+            return response()->json(['message' => 'Unauthenticated.'], 401);
+        }
+        
         return response()->json([
-            'message' => 'Registration successful!',
-            'user' => $user
-        ], 201);    }
+            'nama' => $user->nama,
+            'no_telp' => $user->no_telp,
+            'email' => $user->email,
+            'alamat' => $user->alamat,
+        ], 200);
+    }
 
-        public function showLoginForm()
-        {
-            return view('login'); // Halaman login, sesuaikan dengan view Anda
-        }
+    public function updateProfile(Request $request){
+        $request->validate([
+            'username' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'email' => 'required|email|max:255|unique:users,email,' . auth()->id(),
+            'address' => 'required|string|max:255',
+        ]);
 
-        public function login(Request $request){
-            $loginData = $request->validate([
-                'email' => 'required|email',
-                'password' => 'required'
-            ]);
+        $user = auth()->user();
+        $user->nama = $request->input('username');
+        $user->no_telp = $request->input('phone');
+        $user->email = $request->input('email');
+        $user->alamat = $request->input('address');
+        $user->save();
         
-            if (!Auth::attempt($loginData)) {
-                return response()->json(['message' => 'Invalid credentials provided'], 401);
+        return response()->json([
+            'message' => 'Profile updated successfully',
+            'user' => $user,
+        ]);
+    }
+
+    public function updateProfilePicture(Request $request)
+    {
+        // Validate the uploaded file
+        $request->validate([
+            'profile_picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+    
+        $user = Auth::user();
+    
+        if ($request->hasFile('profile_picture')) {
+            $uploadFolder = 'user';
+            $image = $request->file('profile_picture');
+    
+            $image_uploaded_path = $image->store($uploadFolder, 'public');
+            $uploadedImageResponse = basename($image_uploaded_path);
+
+            if ($user->profile_picture) {
+                Storage::disk('public')->delete('user/' . $user->profile_picture);
             }
-        
-            $user = Auth::user();
-            $token = $user->createToken('Authentication Token')->plainTextToken;
-        
-            return response()->json([
-                'message' => 'Authenticated',
-                'user' => $user,
-                'token' => $token
-            ]);
+
+            $user->profile_picture = $uploadedImageResponse;
+            $user->save();
+    
+            return response([
+                'message' => 'User Profile Updated Successfully!',
+                'data' => $user,
+            ], 200);
         }
+    
+        return response()->json(['error' => 'File upload failed'], 400);
+    }
 
     public function logout(Request $request){
-        $request->user()->token()->revoke();
+        $request->user()->currentAccessToken()->delete();
 
         return response([
             'message' => 'Logged out'
