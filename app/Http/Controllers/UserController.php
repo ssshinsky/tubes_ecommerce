@@ -134,7 +134,7 @@ class UserController extends Controller{
             if($user->profile_picture){
                 Storage::disk('public')->delete('user/' . $user->profile_picture);
             }
-
+            
             $user->profile_picture = $uploadedImageResponse;
             $user->save();
 
@@ -146,6 +146,7 @@ class UserController extends Controller{
 
         return response()->json(['error' => 'File upload failed'], 400);
     }
+
 
     public function logout(Request $request){
         $request->user()->currentAccessToken()->delete();

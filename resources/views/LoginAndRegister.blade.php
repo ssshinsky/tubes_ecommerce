@@ -119,7 +119,7 @@
                     });
                 });
 
-                document.getElementById('loginForm').addEventListener('submit', function(e){
+                document.getElementById('loginForm').addEventListener('submit', function(e) {
                     e.preventDefault();
 
                     const formData = {
@@ -133,10 +133,7 @@
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         },
-                        body: JSON.stringify({
-                            email: document.getElementById('email').value,
-                            password: document.getElementById('password').value
-                        }),
+                        body: JSON.stringify(formData),
                     })
                     .then(response => response.json())
                     .then(data => {

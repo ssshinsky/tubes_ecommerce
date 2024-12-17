@@ -13,9 +13,6 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [UserController::class, 'register'])->name('register');
 Route::post('/login', [UserController::class, 'login'])->name('login');
 
-
-Route::post('/register', [UserController::class, 'register']);
-Route::post('/login', [UserController::class, 'login']);
 Route::get('/users', [UserController::class, 'getAllUsers']);
 Route::delete('/users/{id}', [UserController::class, 'deleteUser']); 
 Route::get('/users/total', [UserController::class, 'getTotalUsers']); 
