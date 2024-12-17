@@ -13,7 +13,7 @@ class UserController extends Controller{
         $registrationData = $request->all();
 
         $validate = Validator::make($registrationData, [
-            'name' => 'required|max:60',
+            'nama' => 'required|max:60',
             'email' => 'required|email:rfc,dns|unique:user',
             'password' => 'required|min:8',
             'no_telp' => 'required|numeric',
@@ -44,7 +44,7 @@ class UserController extends Controller{
             return response(['message' => $validate->errors()->first()], 400);
         }
 
-        if(!Auth::attempt($loginData)){
+        if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             return response(['message' => 'Invalid email & password match'], 401);
         }
 
@@ -66,4 +66,47 @@ class UserController extends Controller{
             'message' => 'Logged out'
         ]);
     }
+
+    public function getAllUsers()
+    {
+        $users = User::all(['id', 'nama', 'email', 'alamat', 'no_telp']);
+        return response([
+            'message' => 'User list retrieved successfully',
+            'users' => $users
+        ], 200);
+    }
+
+    public function index()
+    {
+         $users = User::all(); 
+        return view('dashboard', compact('users'));
+    }
+    
+    public function getTotalUsers()
+    {
+        try {
+            $totalUsers = User::count();
+            return response()->json([
+                'message' => 'Total users retrieved successfully',
+                'totalUsers' => $totalUsers
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function deleteUser($id)
+    {
+        $user = User::find($id);
+    
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+    
+        $user->delete();
+    
+        return response()->json(['message' => 'User deleted successfully'], 200);
+    }
+    
+
 }

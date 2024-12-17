@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>Atma Petshop Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -256,7 +258,7 @@
     <div class="admin-info">
         <a href="{{ url('/dashboard') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center;">
         <img src="{{ asset('images/adminprofile.png') }}" alt="Admin Avatar" class="admin-avatar">
-        <p>Admin123</p>
+        <p>Admin</p>
     </div>
     <div class="admin-info" style="background-color: #b3b792; margin-top: 10px;">
         <a href="{{ url('/konfirmasiPembayaran') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center;">
@@ -284,11 +286,11 @@
     <h1>Atma Petshop Analysis</h1>
 
     <div class="card-section">
-        <div class="card {{ request()->is('dashboard') ? 'active' : '' }}" onclick="window.location.href='{{ url('/dashboard') }}'">
-            <img src="{{ asset('images/totalMember.png') }}" alt="Total Member" class="icon">
-            <h5>Total Member</h5>
-            <p>100</p>
-        </div>
+    <div class="card" id="totalUserCard">
+    <img src="{{ asset('images/totalMember.png') }}" alt="Total Member" class="icon">
+    <h5>Total Member</h5>
+    <p id="totalUsers">Loading...</p>
+</div>
         <div class="card {{ request()->is('barangterjual') ? 'active' : '' }}" onclick="window.location.href='{{ url('/barangterjual') }}'">
             <a href="/barangterjual" style="text-decoration: none; color: inherit;">
                 <img src="{{ asset('images/barangTerjual.png') }}" alt="Barang Terjual" class="icon">
@@ -315,36 +317,26 @@
     </div>
 
     <div class="table-container">
-        <div class="table-title">Total Member</div>
-        <div class="search-box">
-            <img src="{{ asset('images/sort.png') }}" alt="Sort Icon" style="width: 20px; height: 20px; margin-right: 5px; margin-left: 5px;"> 
-            <input type="text" placeholder="Cari pengguna..." style="max-width: 400px; padding: 5px;"> 
-            <button class="icon-button" style="margin-left: 5px;">
-                <img src="{{ asset('images/search.png') }}" alt="Search Icon" style="width: 20px; height: 20px;">
-            </button>
-        </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Nama</th>
-                    <th>Jumlah Transaksi</th>
-                    <th>Jumlah Pengeluaran (Rp)</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($members as $member)
-                    <tr>
-                        <td>
-                            <img src="{{ asset($member['avatar']) }}" alt="{{ $member['name'] }} Avatar" class="avatar">
-                            {{ $member['name'] }}
-                        </td>
-                        <td>{{ $member['transaction_count'] }}</td>
-                        <td>{{ number_format($member['total_spent'], 0, ',', '.') }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+    <div class="table-title">Daftar User Terdaftar</div>
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Cari pengguna..." style="max-width: 400px; padding: 5px;">
     </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nama</th>
+                <th>Email</th>
+                <th>Alamat</th>
+                <th>No. Telepon</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody id="userTableBody">
+        </tbody>
+    </table>
+</div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
@@ -358,6 +350,89 @@
         header.classList.toggle('hidden');
         mainContent.classList.toggle('hidden');
     });
+    
+    document.addEventListener('DOMContentLoaded', function () {
+    const userTable = document.getElementById('userTableBody');
+er
+    fetch('/api/users', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Gagal mengambil data user');
+        return response.json();
+    })
+    .then(data => {
+        userTable.innerHTML = ''; 
+        data.users.forEach(user => {
+            userTable.innerHTML += `
+                <tr>
+                    <td>${user.nama}</td>
+                    <td>${user.email}</td>
+                    <td>${user.alamat}</td>
+                    <td>${user.no_telp}</td>
+                    <td>
+                        <button class="btn btn-danger deleteBtn" data-id="${user.id}">Delete</button>
+                    </td>
+                </tr>
+            `;
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Gagal memuat data user: ' + error.message);
+    });
+
+    userTable.addEventListener('click', function (e) {
+        if (e.target.classList.contains('deleteBtn')) {
+            const userId = e.target.getAttribute('data-id');
+            if (confirm('Apakah Anda yakin ingin menghapus user ini?')) {
+                fetch(`/api/users/${userId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('Gagal menghapus user');
+                    return response.json();
+                })
+                .then(data => {
+                    alert(data.message);
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan: ' + error.message);
+                });
+            }
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    fetch('/api/users/total', { 
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Gagal mengambil total user');
+        return response.json(); 
+    })
+    .then(data => {
+        document.getElementById('totalUsers').innerText = data.totalUsers; 
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('totalUsers').innerText = 'Gagal memuat data';
+    });
+});
+    document.addEventListener('DOMContentLoaded', fetchUsers);
+    
 </script>
 </body>
 </html>

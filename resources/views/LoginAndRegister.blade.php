@@ -25,7 +25,7 @@
                     </div>
 
                     <span class="title">or use your email account</span>
-                    <input type="text" name="nama" placeholder="Nama" required>
+                    <input type="text" name="nama" placeholder="nama" required>
                     <input type="number" name="no_telp" placeholder="Nomor Telepon" required>
                     <input type="text" name="alamat" placeholder="Alamat" required>
                     <input type="email" name="email" placeholder="Email" required>

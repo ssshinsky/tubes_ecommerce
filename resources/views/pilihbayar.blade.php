@@ -12,39 +12,41 @@
         <div class="col-12 mb-3" style="height: 20px; background-color: #B3B792;"></div>
 
         <div class="col-md-4 mb-4">
-            <div class="card" style="border: none;">
-                <div class="card-body text-center" style="background-color: #B3B792; border-radius: 10px;">
-                    <i class="fas fa-university fa-3x text-primary mb-3"></i>
+            <div class="card card-custom">
+                <div class="card-body text-center">
+                    <i class="fas fa-university text-primary"></i>
                     <h5 style="font-weight: bold;">Transfer Bank</h5>
+                    <img src="{{ asset('images/transferbank.png') }}" alt="Transfer Bank" class="img-fluid mb-3 card-img">
                     <p>Bayar melalui transfer antar bank.</p>
-                    <a onclick="location.href='{{ url('berhasilbayar') }}'" class="btn btn-success btn-animate" style="border-radius: 20px; background-color: #849573;">Pilih</a>
+                    <a onclick="location.href='{{ url('berhasilbayar') }}'" class="btn btn-success btn-animate">Pilih</a>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4 mb-4">
-            <div class="card" style="border: none;">
-                <div class="card-body text-center" style="background-color: #B3B792; border-radius: 10px;">
-                    <i class="fas fa-credit-card fa-3x text-danger mb-3"></i>
+            <div class="card card-custom">
+                <div class="card-body text-center">
+                    <i class="fas fa-credit-card text-danger"></i>
                     <h5 style="font-weight: bold;">Kartu Kredit/Debit</h5>
+                    <img src="{{ asset('images/kartukredit.png') }}" alt="Kartu Kredit/Debit" class="img-fluid mb-3 card-img">
                     <p>Pembayaran dengan kartu kredit atau debit.</p>
-                    <a onclick="location.href='{{ url('berhasilbayar') }}'" class="btn btn-success btn-animate" style="border-radius: 20px; background-color: #849573;">Pilih</a>
+                    <a onclick="location.href='{{ url('berhasilbayar') }}'" class="btn btn-success btn-animate">Pilih</a>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4 mb-4">
-            <div class="card" style="border: none;">
-                <div class="card-body text-center" style="background-color: #B3B792; border-radius: 10px;">
-                    <i class="fas fa-wallet fa-3x text-warning mb-3"></i>
+            <div class="card card-custom">
+                <div class="card-body text-center">
+                    <i class="fas fa-wallet text-warning"></i>
                     <h5 style="font-weight: bold;">E-Wallet (GoPay, OVO, dll)</h5>
+                    <img src="{{ asset('images/ewallet.png') }}" alt="E-Wallet" class="img-fluid mb-3 card-img">
                     <p>Bayar cepat dengan e-wallet pilihan Anda.</p>
-                    <a onclick="location.href='{{ url('berhasilbayar') }}'" class="btn btn-success btn-animate" style="border-radius: 20px; background-color: #849573;">Pilih</a>
+                    <a onclick="location.href='{{ url('berhasilbayar') }}'" class="btn btn-success btn-animate">Pilih</a>
                 </div>
             </div>
         </div>
         <div class="col-12 mb-3" style="height: 20px; background-color: #B3B792;"></div>
-
 
     </div>
 </div>
@@ -52,10 +54,28 @@
 <style>
     .btn-animate {
         transition: all 0.3s ease;
+        border-radius: 20px; 
+        background-color: #849573;
     }
     .btn-animate:hover {
         background-color: #6e7a55;
         transform: scale(1.05);
+    }
+    .card-custom {
+        border: none;
+        background-color: #B3B792; 
+        border-radius: 10px;
+        height: 100%; 
+    }
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; 
+    }
+    .card-img {
+        max-width: 80px; 
+        height: auto; 
+        margin: auto; 
     }
 </style>
 

@@ -10,9 +10,13 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::post('/register', [UserController::class, 'register']);
 
+Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
+Route::get('/users', [UserController::class, 'getAllUsers']);
+Route::delete('/users/{id}', [UserController::class, 'deleteUser']); 
+Route::get('/users/total', [UserController::class, 'getTotalUsers']); 
+
 
 Route::get('/produk', [ProdukController::class, 'index']);
 Route::post('/produk', [ProdukController::class, 'store'])->name('daftarBarang.store');
