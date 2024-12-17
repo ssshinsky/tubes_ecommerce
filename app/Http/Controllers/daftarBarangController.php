@@ -14,6 +14,16 @@ class daftarBarangController extends Controller
         return view('daftarBarang', compact('items'));
     }
 
+    public function home()
+    {
+        // Ambil data produk dari tabel 'barangs'
+        $items = Barang::all();
+
+        // Kirim data ke view 'Home'
+        return view('Home', compact('items'));
+    }
+
+
     public function store(Request $request)
     {
         $request->validate([

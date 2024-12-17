@@ -11,28 +11,28 @@
 <div class="container my-5">
     <div class="row">
         <div class="col-md-6 d-flex flex-column align-items-center">
-            <img src="{{ asset('images/canin.jpg') }}" class="img-fluid mb-3" style="max-width: 30%;" alt="Royal Canin">
+            <img src="{{ asset('storage/' . $item->gambar) }}" alt="{{ $item->nama_barang }}" class="img-fluid mb-3" style="max-width: 30%;">
             <div class="d-flex justify-content-center">
-                <img src="{{ asset('images/canin.jpg') }}" class="img-thumbnail mx-1" style="width: 80px;">
-                <img src="{{ asset('images/canin.jpg') }}" class="img-thumbnail mx-1" style="width: 80px;">
-                <img src="{{ asset('images/canin.jpg') }}" class="img-thumbnail mx-1" style="width: 80px;">
-                <img src="{{ asset('images/canin.jpg') }}" class="img-thumbnail mx-1" style="width: 80px;">
+                <img src="{{ asset('storage/' . $item->gambar) }}" class="img-thumbnail mx-1" style="width: 80px;">
+                <img src="{{ asset('storage/' . $item->gambar) }}" class="img-thumbnail mx-1" style="width: 80px;">
+                <img src="{{ asset('storage/' . $item->gambar) }}" class="img-thumbnail mx-1" style="width: 80px;">
+                <img src="{{ asset('storage/' . $item->gambar) }}" class="img-thumbnail mx-1" style="width: 80px;">
             </div>
         </div>
 
         <div class="col-md-6 d-flex align-items-start flex-column">
             <div class="w-100 p-3" style="background-color: #B3B792; border-radius: 10px 10px 0 0;">
-                <h4 class="product-title m-0">Makanan Anjing Royal Canin untuk anjing kecil</h4>
+                <h4 class="product-title m-0">{{ $item->nama_barang }}</h4>
             </div>
 
             <div class="w-100 p-3" style="background-color: #849573;">
-                <h5 class="m-0 text-white" style="font-weight: bold;" id="price">Rp 400.000</h5>
+                <h5 class="m-0 text-white" style="font-weight: bold;" id="price">Rp {{ number_format($item->harga, 0, ',', '.') }}</h5>
             </div>
 
             <div class="w-100" style="height: 5px; background-color: #B3B792;"></div>
 
             <div class="w-100 p-3" style="background-color: #849573;">
-                <p class="product-description text-white m-0">Deskripsi Produk : Makanan anjing royal canin memiliki nutrisi yang lengkap sesuai dengan kebutuhan anjing kecil agar pertumbuhannya maksimal.</p>
+                <p class="product-description text-white m-0">Deskripsi Produk : {{ $item->deskripsi }}</p>
             </div>
 
             <div class="w-100 p-3 d-flex align-items-center justify-content-between" style="background-color: #B3B792; border-radius: 0 0 10px 10px;">
@@ -58,7 +58,7 @@
 </div>
 
 <script>
-    const pricePerUnit = 400000;
+    const pricePerUnit = {{ $item->harga }};
 
     function updateTotalPrice() {
         const quantityInput = document.getElementById('quantity');
@@ -86,11 +86,22 @@
 
     function goToPayment() {
         const quantityInput = document.getElementById('quantity');
-        const totalPrice = quantityInput.value * pricePerUnit;
-        localStorage.setItem('quantity', quantityInput.value);
-        localStorage.setItem('total', totalPrice);
+        const quantity = parseInt(quantityInput.value);
+        const totalPrice = quantity * pricePerUnit;
+
+        const productData = {
+            name: "{{ $item->nama_barang }}",
+            image: "{{ asset('storage/' . $item->gambar) }}",
+            pricePerUnit: pricePerUnit,
+            quantity: quantity,
+            totalPrice: totalPrice,
+        };
+
+        localStorage.setItem('productData', JSON.stringify(productData));
         location.href = '{{ url('bayar') }}';
     }
+
+
 
     function addToCart() {
         const quantityInput = document.getElementById('quantity');

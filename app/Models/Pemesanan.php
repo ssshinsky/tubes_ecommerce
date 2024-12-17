@@ -15,6 +15,7 @@ class Pemesanan extends Model{
     protected $fillable = [
         'id_transaksi',
         'id_produk',
+        'id_user',
         'status',
         'total_harga',
         'alamat_pemesanan',
@@ -25,6 +26,10 @@ class Pemesanan extends Model{
         return $this->belongsTo(transaksi::class, 'id_transaksi');
     }
 
+    public function user(){
+        return $this->belongsTo(User::class, 'id_user');
+    }
+    
     public function produk(){
         return $this->belongsTo(Produk::class, 'id_produk');
     }

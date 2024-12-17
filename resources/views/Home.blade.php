@@ -339,28 +339,18 @@
         </div>         
         <p class="line"> .</p>  
             <div class="products">
-                <?php
-                $products = [
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                ];
-
-                foreach ($products as $product) {
-                    echo "
-                    <a href='" . url('Home') . "' target='_blank'>
-                        <div class='product-card'>
-                            <img src='{$product['image']}' alt='{$product['name']}'>
-                            <h2>{$product['price']}</h2>
-                            <p>{$product['name']}</p>
-                            <p>⭐⭐⭐⭐⭐ {$product['reviews']} reviews</p>
+                @foreach($items as $item)
+                <a href="{{ url('/beli', ['id_barang' => $item->id_barang]) }}">
+                    <div class='product-card'>
+                            <img src="{{ asset('storage/' . $item->gambar) }}" alt="{{ $item->nama_barang }}" width="50">
+                            <h2>Rp {{ number_format($item->harga, 0, ',', '.') }}</h2>
+                            <p>{{$item->nama_barang}}</p>
+                            <p>⭐⭐⭐⭐⭐ reviews</p>
+                            
                         </div>
                     </a>
-                    ";
-                }
-            ?>
+                @endforeach
+                
             </div>           
             <div class="products">
                 <?php

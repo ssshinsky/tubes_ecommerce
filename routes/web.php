@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\daftarBarangController;
+use App\Models\Barang;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('loginAndRegister');
@@ -28,8 +30,10 @@ Route::get('/Home', function (){
     return view('Home');
 });
 
-Route::get('/beli', function (){
-    return view('beli');
+Route::get('/beli/{id_barang}', function ($id_barang) {
+    $item = Barang::findOrFail($id_barang); // Cari produk berdasarkan ID
+
+    return view('beli', ['item' => $item]);
 });
 
 Route::get('/kucing', function (){
@@ -152,3 +156,5 @@ Route::post('/daftarBarang', [daftarBarangController::class, 'store'])->name('da
 Route::delete('/daftarBarang/{id}', [daftarBarangController::class, 'destroy'])->name('daftarBarang.destroy');
 Route::get('/daftarBarang/{id}/edit', [daftarBarangController::class, 'edit'])->name('daftarBarang.edit');
 Route::put('/daftarBarang/{id}', [daftarBarangController::class, 'update'])->name('daftarBarang.update');
+
+Route::get('/Home', [daftarBarangController::class, 'home'])->name('home');
