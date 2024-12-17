@@ -51,3 +51,9 @@ Route::middleware('auth:api')->group(function(){
     Route::post('/pendapatan/{id}',[PendapatanController::class,'update'])->name('pendapatan.update');
     Route::delete('/pendapatan/{id}',[PendapatanController::class,'destroy'])->name('pendapatan.destroy');
 });
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/profile', [UserController::class, 'showProfile'])->name('profile');
+    Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
+    Route::post('/profile/picture/update', [UserController::class, 'updateProfilePicture'])->name('profile.updatePicture');
+});

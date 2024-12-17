@@ -126,26 +126,148 @@
                 <h2>Profil Saya</h2>
                 <div class="profile-card">
                     <div class="profile-picture">
-                        <img src="{{ asset('images/ProfilePic.png') }}" alt="Profile Picture">
+                        <img src="{{ asset('storage/user/' . Auth::user()->profile_picture) }}" alt="Profile Picture">
                     </div>
 
-                    <button class="change-picture">Ubah Gambar</button>
+                    <form id="updateProfilePictureForm" enctype="multipart/form-data">
+                        @csrf
+                        <label for="profile_picture">Profile Picture</label>
+                        <input type="file" id="profile_picture" name="profile_picture" accept="image/*" required>
+                        <button type="submit">Upload Picture</button>
+                    </form>
+
+                    <div id="picSuccessMessage" style="color: green; display: none;">
+                        Profile picture updated successfully.
+                    </div>
+
+                    <div id="picErrorMessage" style="color: red; display: none;">
+                        Error updating profile picture.
+                    </div>
                     
-                    <form>
+                    <form id="updateProfileForm" method="POST" action="{{ route('profile.update') }}">
+                        @csrf
                         <label for="username">Username</label>
-                        <input type="text" id="username" value="Renaldy">
+                        <input type="text" id="username" name="username" required>
 
                         <label for="phone">Nomor Telepon</label>
-                        <input type="text" id="phone" value="081234567890">
-                    
+                        <input type="text" id="phone" name="phone" required>
+
                         <label for="email">Email</label>
-                        <input type="email" id="email" value="renaldyimut@gmail.com">
-                    
+                        <input type="email" id="email" name="email" required>
+
                         <label for="address">Alamat</label>
-                        <input type="text" id="address" value="jl. babarsari no. 86">
-                    
+                        <input type="text" id="address" name="address" required>
+
                         <button type="submit">Simpan</button>
                     </form>
+
+                    <div id="successMessage" style="color: green; display: none;">
+                        Profile updated successfully.
+                    </div>
+
+                    <div id="errorMessage" style="color: red; display: none;">
+                        Error updating profile.
+                    </div>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function (){
+                            const token = localStorage.getItem('authToken');
+
+                            if(!token){
+                                alert('You are not authenticated. Please log in.');
+                                window.location.href = '/login';
+                            }
+
+                            fetch('/api/profile', {
+                                method: 'GET',
+                                headers: {
+                                    'Authorization': 'Bearer ' + token,
+                                    'Accept': 'application/json',
+                                },
+                            })
+                            .then(response => {
+                                if(!response.ok){
+                                    throw new Error('Failed to fetch profile. Please log in again.');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                document.getElementById('username').value = data.nama;
+                                document.getElementById('phone').value = data.no_telp;
+                                document.getElementById('email').value = data.email;
+                                document.getElementById('address').value = data.alamat;
+                            })
+                            .catch(error => {
+                                console.error(error.message);
+                                alert('Error: ' + error.message);
+                                window.location.href = '/login';
+                            });
+
+                            document.getElementById('updateProfileForm').addEventListener('submit', function (e) {
+                                e.preventDefault();
+
+                                const formData = new FormData(this);
+                                const data = {};
+                                formData.forEach((value, key) => {
+                                    data[key] = value;
+                                });
+
+                                fetch('/api/profile/update', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Authorization': 'Bearer ' + token,
+                                        'Accept': 'application/json',
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify(data),
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if(data.message === 'Profile updated successfully'){
+                                        document.getElementById('successMessage').style.display = 'block';
+                                        document.getElementById('errorMessage').style.display = 'none';
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error(error.message);
+                                    document.getElementById('errorMessage').style.display = 'block';
+                                    document.getElementById('successMessage').style.display = 'none';
+                                });
+                            });
+
+                            document.getElementById('updateProfilePictureForm').addEventListener('submit', function (e) {
+                                e.preventDefault();
+
+                                const token = localStorage.getItem('authToken');
+                                const formData = new FormData();
+                                const fileInput = document.getElementById('profile_picture');
+                                formData.append('profile_picture', fileInput.files[0]);
+
+                                fetch('/api/profile/picture/update', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Authorization': 'Bearer ' + token,
+                                        'Accept': 'application/json',
+                                    },
+                                    body: formData,
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if(data.message){
+                                        document.getElementById('picSuccessMessage').style.display = 'block';
+                                        document.getElementById('picErrorMessage').style.display = 'none';
+
+                                        const profileImage = document.querySelector('.profile-picture img');
+                                        profileImage.src = data.profile_picture + '?' + new Date().getTime();
+                                    }
+                                })
+                                .catch(error => {
+                                    document.getElementById('picErrorMessage').style.display = 'block';
+                                    document.getElementById('picSuccessMessage').style.display = 'none';
+                                });
+                            });
+                        });
+                    </script>
                 </div>
             </div>
         </div>
