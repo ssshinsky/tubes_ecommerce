@@ -133,6 +133,8 @@ Route::get('/rating', function () {
 
 Route::get('/Home', [ProdukController::class, 'home'])->name('home');
 
+Route::get('/kucing', [ProdukController::class, 'kucing'])->name('kucing');
+
 // Route::get('/daftarBarang', function () {
 //     $items = [
 //         (object)[

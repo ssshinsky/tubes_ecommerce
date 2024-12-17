@@ -2,18 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Controller ;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 
 class UserController extends Controller{
+    public function showRegisterForm()
+    {
+        return view('loginAndRegister'); 
+    }
+
     public function register(Request $request){
         $registrationData = $request->all();
 
         $validate = Validator::make($registrationData, [
-            'name' => 'required|max:60',
+            'nama' => 'required|max:60',
             'email' => 'required|email:rfc,dns|unique:user',
             'password' => 'required|min:8',
             'no_telp' => 'required|numeric',
@@ -27,37 +32,35 @@ class UserController extends Controller{
 
         $user = User::create($registrationData);
 
-        return response([
-            'message' => 'Register Success',
+        return response()->json([
+            'message' => 'Registration successful!',
             'user' => $user
-        ], 200);
-    }
+        ], 201);    }
 
-    public function login(Request $request){
-        $loginData = $request->all();
-
-        $validate = Validator::make($loginData, [
-            'email' => 'required|email:rfc,dns',
-            'password' => 'required|min:8',
-        ]);
-        if($validate->fails()) {
-            return response(['message' => $validate->errors()->first()], 400);
+        public function showLoginForm()
+        {
+            return view('login'); // Halaman login, sesuaikan dengan view Anda
         }
 
-        if(!Auth::attempt($loginData)){
-            return response(['message' => 'Invalid email & password match'], 401);
+        public function login(Request $request){
+            $loginData = $request->validate([
+                'email' => 'required|email',
+                'password' => 'required'
+            ]);
+        
+            if (!Auth::attempt($loginData)) {
+                return response()->json(['message' => 'Invalid credentials provided'], 401);
+            }
+        
+            $user = Auth::user();
+            $token = $user->createToken('Authentication Token')->plainTextToken;
+        
+            return response()->json([
+                'message' => 'Authenticated',
+                'user' => $user,
+                'token' => $token
+            ]);
         }
-
-        $user = Auth::user();
-        $token = $user->createToken('Authentication Token')->accessToken;
-
-        return response([
-            'message' => 'Authenticated',
-            'user' => $user,
-            'token_type' => 'Bearer',
-            'access_token' => $token
-        ]);
-    }
 
     public function logout(Request $request){
         $request->user()->token()->revoke();

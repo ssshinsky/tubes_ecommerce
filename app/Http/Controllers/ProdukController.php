@@ -11,16 +11,22 @@ use Illuminate\Support\Facades\Validator;
 class ProdukController extends Controller
 {
     public function index()
-{
-     $produk = Produk::all(); 
-    return view('daftarBarang', compact('produk'));
-}
+    {
+        $produk = Produk::all(); 
+        return view('daftarBarang', compact('produk'));
+    }
 
 
     public function home(){
         $produk = Produk::inRandomOrder()->get();
 
         return view('Home', compact('produk'));
+    }
+
+    public function kucing(){
+        $produk = Produk::inRandomOrder()->get();
+
+        return view('kucing', compact('produk'));
     }
 
     public function show($id)

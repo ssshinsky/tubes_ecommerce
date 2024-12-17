@@ -15,10 +15,12 @@ Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
 
 Route::get('/Home', [ProdukController::class, 'home'])->name('home');
+Route::get('/kucing', [ProdukController::class, 'kucing'])->name('kucing');
 Route::get('/beli/{id}', function ($id) {
-    $item = Produk::findOrFail($id); // Cari produk berdasarkan ID
+    $item = Produk::findOrFail($id); 
     return view('beli', ['item' => $item]);
 });
+
 Route::get('/produk', [ProdukController::class, 'index']);
 Route::post('/produk', [ProdukController::class, 'store'])->name('daftarBarang.store');
 Route::get('produk/{id}', [ProdukController::class, 'show']);
