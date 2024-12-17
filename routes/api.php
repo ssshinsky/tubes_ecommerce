@@ -66,8 +66,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/pendapatan/{id}',[PendapatanController::class,'destroy'])->name('pendapatan.destroy');
 });
 
-Route::get('/produk',[ProdukController::class,'index'])->name('produk.index');
-Route::post('/produk',[ProdukController::class,'store'])->name('produk.store');
-Route::get('/produk/{id}',[ProdukController::class,'show'])->name('produk.show');
-Route::post('/produk/{id}',[ProdukController::class,'update'])->name('produk.update');
-Route::delete('/produk/{id}',[ProdukController::class,'destroy'])->name('produk.destroy');
+// Route::get('/produk',[ProdukController::class,'index'])->name('produk.index');
+// Route::post('/produk',[ProdukController::class,'store'])->name('produk.store');
+// Route::get('/produk/{id}',[ProdukController::class,'show'])->name('produk.show');
+// Route::post('/produk/{id}',[ProdukController::class,'update'])->name('produk.update');
+// Route::delete('/produk/{id}',[ProdukController::class,'destroy'])->name('produk.destroy');
