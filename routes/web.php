@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\daftarBarangController;
 
 Route::get('/', function () {
-    return view('loginAndRegister');
+    return view('loginAndRegister'); // Halaman login dan register
 });
 
 Route::view('/bayar', 'bayar');
@@ -14,7 +15,10 @@ Route::view('/cart', 'cart');
 Route::view('/terima', 'terima');
 Route::view('/review', 'review');
 Route::view('/selesai', 'selesai');
-
+Route::get('/login', [UserController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [UserController::class, 'login']);
+Route::get('/register', [UserController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [UserController::class, 'register'])->name('register');
 
 Route::get('/loginAndRegister', function () {
     return view('LoginAndRegister');
@@ -26,7 +30,7 @@ Route::get('/profile', function () {
 
 Route::get('/Home', function (){
     return view('Home');
-});
+})->name('Home');
 
 Route::get('/beli', function (){
     return view('beli');
