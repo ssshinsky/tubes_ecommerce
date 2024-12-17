@@ -8,6 +8,8 @@
 
         <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.js"></script>
     </head>
 
     <body>
@@ -119,7 +121,9 @@
                     </ul>
                 </div>
 
-                <button class="logout"><a href="{{ url('loginAndRegister') }}" style="text-decoration: none; color: white;">Logout</a></button>
+                <button class="logout" id="logoutButton" style="text-decoration: none; color: white; background-color: red;">
+                    Logout
+                </button>
             </aside>
 
             <div class="profile-section">
@@ -170,11 +174,19 @@
                     </div>
 
                     <script>
-                        document.addEventListener('DOMContentLoaded', function (){
+                        document.addEventListener('DOMContentLoaded', function(){
                             const token = localStorage.getItem('authToken');
 
                             if(!token){
-                                alert('You are not authenticated. Please log in.');
+                                Toastify({
+                                    text: `<i class="fa-solid fa-exclamation-triangle"></i> You are not authenticated. Please log in.`,
+                                    backgroundColor: "#dc3545",
+                                    duration: 3000,
+                                    gravity: "top",
+                                    position: "right",
+                                    escapeMarkup: false,
+                                }).showToast();
+
                                 window.location.href = '/login';
                             }
 
@@ -198,12 +210,18 @@
                                 document.getElementById('address').value = data.alamat;
                             })
                             .catch(error => {
-                                console.error(error.message);
-                                alert('Error: ' + error.message);
+                                Toastify({
+                                    text: `<i class="fa-solid fa-exclamation-triangle"></i> Error: ${error.message}`,
+                                    backgroundColor: "#dc3545",
+                                    duration: 3000,
+                                    gravity: "top",
+                                    position: "right",
+                                    escapeMarkup: false,
+                                }).showToast();
                                 window.location.href = '/login';
                             });
 
-                            document.getElementById('updateProfileForm').addEventListener('submit', function (e) {
+                            document.getElementById('updateProfileForm').addEventListener('submit', function(e){
                                 e.preventDefault();
 
                                 const formData = new FormData(this);
@@ -224,21 +242,33 @@
                                 .then(response => response.json())
                                 .then(data => {
                                     if(data.message === 'Profile updated successfully'){
-                                        document.getElementById('successMessage').style.display = 'block';
-                                        document.getElementById('errorMessage').style.display = 'none';
+                                        Toastify({
+                                            text: `<i class="fa-solid fa-check-circle"></i> Profile updated successfully.`,
+                                            backgroundColor: "#28a745",
+                                            duration: 3000,
+                                            gravity: "top",
+                                            position: "right",
+                                            escapeMarkup: false,
+                                        }).showToast();
+                                    }else{
+                                        throw new Error('Failed to update profile.');
                                     }
                                 })
                                 .catch(error => {
-                                    console.error(error.message);
-                                    document.getElementById('errorMessage').style.display = 'block';
-                                    document.getElementById('successMessage').style.display = 'none';
+                                    Toastify({
+                                        text: `<i class="fa-solid fa-exclamation-circle"></i> Error: ${error.message}`,
+                                        backgroundColor: "#dc3545",
+                                        duration: 3000,
+                                        gravity: "top",
+                                        position: "right",
+                                        escapeMarkup: false,
+                                    }).showToast();
                                 });
                             });
 
-                            document.getElementById('updateProfilePictureForm').addEventListener('submit', function (e) {
+                            document.getElementById('updateProfilePictureForm').addEventListener('submit', function(e){
                                 e.preventDefault();
 
-                                const token = localStorage.getItem('authToken');
                                 const formData = new FormData();
                                 const fileInput = document.getElementById('profile_picture');
                                 formData.append('profile_picture', fileInput.files[0]);
@@ -254,17 +284,78 @@
                                 .then(response => response.json())
                                 .then(data => {
                                     if(data.message){
-                                        document.getElementById('picSuccessMessage').style.display = 'block';
-                                        document.getElementById('picErrorMessage').style.display = 'none';
+                                        Toastify({
+                                            text: `<i class="fa-solid fa-check-circle"></i> Profile picture updated successfully.`,
+                                            backgroundColor: "#28a745",
+                                            duration: 3000,
+                                            gravity: "top",
+                                            position: "right",
+                                            escapeMarkup: false,
+                                        }).showToast();
 
                                         const profileImage = document.querySelector('.profile-picture img');
                                         profileImage.src = data.profile_picture + '?' + new Date().getTime();
+
+                                        setTimeout(() => {
+                                            window.location.reload();
+                                        }, 1500);
+                                    }else{
+                                        throw new Error('Failed to update profile picture.');
                                     }
                                 })
                                 .catch(error => {
-                                    document.getElementById('picErrorMessage').style.display = 'block';
-                                    document.getElementById('picSuccessMessage').style.display = 'none';
+                                    Toastify({
+                                        text: `<i class="fa-solid fa-exclamation-circle"></i> Error: ${error.message}`,
+                                        backgroundColor: "#dc3545",
+                                        duration: 3000,
+                                        gravity: "top",
+                                        position: "right",
+                                        escapeMarkup: false,
+                                    }).showToast();
                                 });
+                            });
+
+                        });
+
+                        document.getElementById('logoutButton').addEventListener('click', function (){
+                            const token = localStorage.getItem('authToken');
+
+                            fetch('/api/logout', {
+                                method: 'POST',
+                                headers: {
+                                    'Authorization': 'Bearer ' + token,
+                                    'Accept': 'application/json',
+                                },
+                            })
+                            .then(response => {
+                                if(response.ok){
+                                    localStorage.removeItem('authToken');
+                                    Toastify({
+                                        text: `<i class="fa-solid fa-check-circle"></i> You have successfully logged out.`,
+                                        backgroundColor: "#28a745",
+                                        duration: 3000,
+                                        gravity: "top",
+                                        position: "right",
+                                        escapeMarkup: false,
+                                    }).showToast();
+
+                                    setTimeout(() => {
+                                        window.location.href = '/login';
+                                    }, 3000);
+                                }else{
+                                    throw new Error('Failed to log out.');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error.message);
+                                Toastify({
+                                    text: `<i class="fa-solid fa-exclamation-triangle"></i> Error: Unable to log out.`,
+                                    backgroundColor: "#dc3545",
+                                    duration: 3000,
+                                    gravity: "top",
+                                    position: "right",
+                                    escapeMarkup: false,
+                                }).showToast();
                             });
                         });
                     </script>

@@ -12,14 +12,11 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [UserController::class, 'register'])->name('register');
 Route::post('/login', [UserController::class, 'login'])->name('login');
 
-Route::middleware('auth:api')->group(function(){
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/profile', [UserController::class, 'showProfile'])->name('profile');
+    Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
+    Route::post('/profile/picture/update', [UserController::class, 'updateProfilePicture'])->name('profile.updatePicture');
     Route::post('/logout', [UserController::class, 'logout'])->name('logout');
-
-    Route::get('/produk',[ProdukController::class,'index'])->name('produk.index');
-    Route::post('/produk',[ProdukController::class,'store'])->name('produk.store');
-    Route::get('/produk/{id}',[ProdukController::class,'show'])->name('produk.show');
-    Route::post('/produk/{id}',[ProdukController::class,'update'])->name('produk.update');
-    Route::delete('/produk/{id}',[ProdukController::class,'destroy'])->name('produk.destroy');
 
     Route::get('/transaksi',[TransaksiController::class,'index'])->name('transaksi.index');
     Route::post('/transaksi',[TransaksiController::class,'store'])->name('transaksi.store');
@@ -52,8 +49,8 @@ Route::middleware('auth:api')->group(function(){
     Route::delete('/pendapatan/{id}',[PendapatanController::class,'destroy'])->name('pendapatan.destroy');
 });
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/profile', [UserController::class, 'showProfile'])->name('profile');
-    Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
-    Route::post('/profile/picture/update', [UserController::class, 'updateProfilePicture'])->name('profile.updatePicture');
-});
+Route::get('/produk',[ProdukController::class,'index'])->name('produk.index');
+Route::post('/produk',[ProdukController::class,'store'])->name('produk.store');
+Route::get('/produk/{id}',[ProdukController::class,'show'])->name('produk.show');
+Route::post('/produk/{id}',[ProdukController::class,'update'])->name('produk.update');
+Route::delete('/produk/{id}',[ProdukController::class,'destroy'])->name('produk.destroy');
