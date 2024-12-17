@@ -19,7 +19,7 @@ class UserController extends Controller{
 
         $validate = Validator::make($registrationData, [
             'nama' => 'required|max:60',
-            'email' => 'required|unique:users',
+            'email' => 'required|email:rfc,dns|unique:users',
             'password' => 'required|min:8',
             'no_telp' => 'required|numeric',
             'alamat' => 'required',
@@ -30,12 +30,12 @@ class UserController extends Controller{
 
         $registrationData['password'] = bcrypt($request->password);
 
-        $users = User::create($registrationData);
+        $user = User::create($registrationData);
 
-        return response([
-            'message' => 'Register Success',
-            'user' => $users
-        ], 200);
+        return response()->json([
+            'message' => 'Registration successful!',
+            'user' => $user
+        ], 201);    
     }
 
     public function showLoginForm(){
@@ -43,30 +43,25 @@ class UserController extends Controller{
     }
 
     public function login(Request $request){
-        $loginData = $request->all();
-
-        $validate = Validator::make($loginData, [
-            'email' => 'required|string|email',
-            'password' => 'required|min:8',
+        $loginData = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
         ]);
-        if($validate->fails()){
-            return response(['message' => $validate->errors()->first()], 400);
-        }
 
-        if(!Auth::attempt($loginData)){
-            return response(['message' => 'Invalid email & password match'], 401);
+        if (!Auth::attempt($loginData)) {
+            return response()->json(['message' => 'Invalid credentials provided'], 401);
         }
-
+    
         $user = Auth::user();
         $token = $user->createToken('Authentication Token')->plainTextToken;
-
-        return response([
+    
+        return response()->json([
             'message' => 'Authenticated',
             'user' => $user,
-            'token_type' => 'Bearer',
-            'access_token' => $token
+            'token' => $token
         ]);
     }
+
 
     public function showProfile(Request $request){
         $user = Auth::user();
@@ -137,7 +132,7 @@ class UserController extends Controller{
     }
 
     public function logout(Request $request){
-        $request->user()->currentAccessToken()->delete();
+        $request->user()->token()->revoke();
 
         return response([
             'message' => 'Logged out'

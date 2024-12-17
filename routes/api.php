@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\PemesananController;
 use App\Http\Controllers\PendapatanController;
 use App\Http\Controllers\PengirimanController;
@@ -7,17 +8,21 @@ use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ProdukController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/register', [UserController::class, 'register'])->name('register');
-Route::post('/login', [UserController::class, 'login'])->name('login');
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
 
-Route::middleware('auth:api')->group(function(){
-    Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+Route::post('/register', [UserController::class, 'register']);
 
 Route::post('/login', [UserController::class, 'login']);
+
+// Route::post('/register', [UserController::class, 'register'])->name('register');
+// Route::post('/login', [UserController::class, 'login'])->name('login');
+
+
 
 Route::get('/Home', [ProdukController::class, 'home'])->name('home');
 Route::get('/kucing', [ProdukController::class, 'kucing'])->name('kucing');
@@ -40,7 +45,9 @@ Route::post('/produk', [ProdukController::class, 'store']);
     // Route::get('/produk/{id}',[ProdukController::class,'show'])->name('produk.show');
     // Route::post('/produk/{id}',[ProdukController::class,'update'])->name('produk.update');
     // Route::delete('/produk/{id}',[ProdukController::class,'destroy'])->name('produk.destroy');
-
+    Route::middleware('auth:api')->group(function(){
+        Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+    
     Route::get('/transaksi',[TransaksiController::class,'index'])->name('transaksi.index');
     Route::post('/transaksi',[TransaksiController::class,'store'])->name('transaksi.store');
     Route::get('/transaksi/{id}',[TransaksiController::class,'show'])->name('transaksi.show');

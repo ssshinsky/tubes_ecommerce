@@ -14,7 +14,7 @@
     <body>
         <div class="container" id="container">
             <div class="form-container sign-up">
-                <form id="registerForm" method="POST" action="{{ url('/api/register') }}">
+                <form id="registerForm" method="POST">
                     @csrf
                     <h1 class="title">Create Account</h1>
                     <div class="social-icons">
@@ -25,17 +25,19 @@
                     </div>
 
                     <span class="title">or use your email account</span>
-                    <input type="text" name="nama" placeholder="Nama" required>
+                    <input type="text" name="nama" placeholder="nama" required>
                     <input type="number" name="no_telp" placeholder="Nomor Telepon" required>
                     <input type="text" name="alamat" placeholder="Alamat" required>
                     <input type="email" name="email" placeholder="Email" required>
                     <input type="password" name="password" placeholder="Password" required>
-                    <button>Register</button>
+                    <button>
+                         Register
+                    </button>
                 </form>
             </div>  
             
             <div class="form-container sign-in">
-                <form id="loginForm" method="POST" action="{{ url('/api/login') }}">
+                <form id="loginForm">
                     @csrf
                     <h1 class="title">Login</h1>
                     <div class="social-icons">
@@ -45,25 +47,24 @@
                         <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
                         <a href="{{ url('dashboard') }}" class="icon"><i class="fa-solid fa-pen"></i></a>
                     </div>
-
                     <span class="title">or use your email account</span>
-                    <input type="email" name="email" id="email" placeholder="Email" required>
-                    <input type="password" name="password" id="password" placeholder="Password" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Password" required>
                     <a class="title" href="#">Forget Your Password?</a>
-                    <button type="submit">Log in</button>
+                    <button>Log in</button>
                 </form>
             </div>
 
             <script>
-                function getHeaders(){
+                function getHeaders() {
                     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                    return{
+                    return {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': token
                     };
                 }
 
-                // Script untuk handle submit register
+                // Script untuk handle submit 
                 document.getElementById('registerForm').addEventListener('submit', function(e) {
                     e.preventDefault();
                     let formData = new FormData(this);
@@ -81,47 +82,52 @@
                     .then(response => response.json())
                     .then(data => {
                         alert(data.message); 
-                        if(data.message === ('Register Success')){
+                        if (data.message.includes('Registrasi berhasil')) {
                             this.reset();
-                            window.location.href = '/loginAndRegister'; 
+                            window.location.href = '/login'; 
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert('Registrasi failed: ' + error.message); 
+                        alert('Registrasi gagal: ' + error.message); 
                     });
                 });
 
-                // Login {Updated by Arya}
-                document.getElementById('loginForm').addEventListener('submit', function(e){
+                // Script untuk handle submit 
+                document.getElementById('loginForm').addEventListener('submit', function(e) {
                     e.preventDefault();
+                    let formData = new FormData(this);
+                    let data = {};
 
-                    const formData = {
-                        email: document.getElementById('email').value,
-                        password: document.getElementById('password').value
-                    };
+                    formData.forEach((value, key) => {
+                        data[key] = value;
+                    });
 
-                    fetch('/login', {
+                    fetch('/api/login', {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        },
-                        body: JSON.stringify(formData),
+                        headers: getHeaders(),
+                        body: JSON.stringify(data),
                     })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) throw new Error('Username atau password salah, silahkan coba lagi');
+                        return response.json();
+                    })
                     .then(data => {
-                        if(data.message === 'Authenticated'){
-                            localStorage.setItem('authToken', data.access_token);
-                            alert('Login Successful');
-                            window.location.href = '/Home';
-                        }else{
-                            alert(data.message);
+                        console.log(data);  
+                        if (data.message) {
+                            window.location.href = '/Home'; 
+                        } else {
+                            alert(data.message); 
                         }
                     })
-                    .catch(error => console.error('Error:', error));
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert(error.message); 
+                    });
                 });
             </script>
+
+
 
             <div class="toggle-container">
                 <div class="toggle">
