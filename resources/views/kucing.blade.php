@@ -266,6 +266,7 @@
         </div>
         <p class="line"> .</p>  
             <div class="products">
+<<<<<<< Updated upstream
                 <?php
                 $products = [
                     ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
@@ -288,6 +289,28 @@
                     ";
                 }
             ?>
+=======
+            @if($produk->isNotEmpty())
+                        @foreach ($produk as $item)
+                            @if($item->kategori == 'kucing')
+                                <a href="{{ url('/beli', ['id' => $item->id]) }}">
+                                    <div class='product-card'>
+                                        @if($item->gambar_produk)
+                                            <img src="{{ $item->gambar_produk }}" alt="{{ $item->nama }}" width="100">
+                                            @else
+                                            -
+                                        @endif
+                                        <h2>Rp {{ number_format($item->harga, 0, ',', '.') }}</h2>
+                                        <p>{{ $item->nama }}</p>
+                                        <p>⭐⭐⭐⭐⭐ reviews</p>
+                                    </div>
+                                </a>
+                            @endif
+                        @endforeach
+                    @else
+                        <p>Tidak ada produk yang tersedia.</p>
+                    @endif
+>>>>>>> Stashed changes
             </div>  
             <div class="products">
                 <?php

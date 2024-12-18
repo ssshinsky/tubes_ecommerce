@@ -304,6 +304,7 @@
             <img src="images/terlaris_untuk_kucing.png" class="text3" alt="text terlaris untuk kucing">
             <div class="section1">
                 <div class="products-promo-row">
+<<<<<<< Updated upstream
                     <div class="product">
                         <div class="product-grid">
                             <?php
@@ -327,6 +328,30 @@
                             ?>
                         </div>
                     </div>
+=======
+                <div class="products-khusus">
+                    @if($produk->isNotEmpty())
+                        @foreach ($produk as $item)
+                            @if($item->kategori == 'kucing')
+                                <a href="{{ url('/beli', ['id' => $item->id]) }}">
+                                    <div class='product-card'>
+                                        @if($item->gambar_produk)
+                                            <img src="{{ $item->gambar_produk }}" alt="{{ $item->nama }}" width="100">
+                                            @else
+                                            -
+                                        @endif
+                                        <h2>Rp {{ number_format($item->harga, 0, ',', '.') }}</h2>
+                                        <p>{{ $item->nama }}</p>
+                                        <p>⭐⭐⭐⭐⭐ reviews</p>
+                                    </div>
+                                </a>
+                            @endif
+                        @endforeach
+                    @else
+                        <p>Tidak ada produk yang tersedia.</p>
+                    @endif
+                </div>
+>>>>>>> Stashed changes
 
                     <div class="promo-container">
                         <img src="images/promosi_kucing.png" class="promo-image" alt="foto promosi kucing">
