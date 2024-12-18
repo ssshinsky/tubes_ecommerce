@@ -66,8 +66,35 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 ## Kelas C Kelompok 10
-Anggota Kelompok:
+**Anggota Kelompok:**
 - Arya Nugraha (220711957) - backend, profile
-- Gabriella Shinsky H (220711884) - 
+- Gabriella Shinsky H. (220711884) -
+- Mario Arya Mahardika (220711664)
+- Reinaldy Restu Aji (220711877) -
 
-Username & Password Login:
+**Username & Password Login:**
+- Login User:
+    - Email: userpw@gmail.com
+    - Password: 12345678
+- Login Admin:
+    - Email: admin@gmail.com
+    - Password: admin123
+
+**Bonus yang diambil:**
+- Routes API:
+    - POST /api/register - Register User
+    - POST /api/login - Register Login
+    - GET /api/users - Get All User
+    - DELETE /api/users/{id} - Delete User
+    - GET /api/users/total - Get Total Users
+    - GET /api/produk - Get All Produk
+    - POST /api/produk - Create Produk
+    - GET /api/produk/{id} - Get Produk
+    - PUT /api/produk/{id} - Update Produk
+    - DELETE /api/produk/{id} - Delete Produk
+    - POST /api/cart/add - Add Pemesanan
+    - GET /api/cart - Get All Pemesanan
+    - DELETE /api/cart/{id} - Delete Pemesanan
+    - GET /api/profile - Get Profile
+    - POST /api/profile/update - Update Profile
+    - POST /api/logout - Logout User
