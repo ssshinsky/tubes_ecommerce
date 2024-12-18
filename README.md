@@ -65,12 +65,12 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
-## Kelas C Kelompok 10
+## Kelas C Kelompok 3
 **Anggota Kelompok:**
-- Arya Nugraha (220711957) - backend, profile
-- Gabriella Shinsky H. (220711884) -
-- Mario Arya Mahardika (220711664)
-- Reinaldy Restu Aji (220711877) -
+- Arya Nugraha (220711957) - Membuat figma login, membuat figma register, membuat backend, membuat frontend dan backend profile, mengintegrasikan backend frontend transaksi.
+- Gabriella Shinsky H. (220711884) - Membuat Figma Home, ⁠membuat Front End keseluruhan bagian Transaksi Pembelian, Rating Review, Order Tracking, mengintegrasikan Back End pada bagian Produk dengan seluruh Front End bagian tampil produk pada Home dan Kategori Hewan.
+- Mario Arya Mahardika (220711664) - Membuat bagian Home Front end bagian home dan kategori, Membuat Figma bagian Home, membuat login register masuk ke database, mengintegrasikan backend dan frontend transaksi.
+- Reinaldy Restu Aji (220711877) - Membuat figma bagiantransaksi pembayaran, Membuat figma bagian admin, Membuat code view(frontend) dan fungsi(backend) pada bagian admin yang terdiri : dashboard(total member), barangterjual, rating, pendapata, konfirmasi pembayaran, daftarbarang.
 
 **Username & Password Login:**
 - Login User:
