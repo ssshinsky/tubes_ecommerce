@@ -206,6 +206,7 @@
                                 document.getElementById('phone').value = data.no_telp;
                                 document.getElementById('email').value = data.email;
                                 document.getElementById('address').value = data.alamat;
+                                document.getElementById('profile_picure').value =data.profile_picture;
                             })
                             .catch(error => {
                                 Toastify({

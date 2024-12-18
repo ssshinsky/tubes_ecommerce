@@ -26,7 +26,6 @@ Route::delete('produk/{id}', [ProdukController::class, 'destroy']);
 
 Route::get('/produk', [ProdukController::class, 'getProduk']);
 Route::post('/produk', [ProdukController::class, 'store']);
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [UserController::class, 'showProfile'])->name('profile');
     Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');

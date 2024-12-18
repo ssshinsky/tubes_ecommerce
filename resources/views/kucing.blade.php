@@ -186,8 +186,8 @@
             border-radius: 0px 0px 10px 10px;
         }
         .products {
-            display: flex;
-            grid-template-columns: repeat(4, 1fr);
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
             gap: 20px;
             margin-bottom: 30px;
             margin-top: 30px;
@@ -224,7 +224,8 @@
         .product-card img {
             width: 100%;
             max-width: 150px;
-            height: auto;
+            height: 200px;
+            object-fit: cover;
             margin-bottom: 10px;
         }
         .product-card p {
@@ -266,126 +267,24 @@
         </div>
         <p class="line"> .</p>  
             <div class="products">
-                <?php
-                $products = [
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                ];
-
-                foreach ($products as $product) {
-                    echo "
-                    <a href='" . url('Home') . "' target='_blank'>
-                        <div class='product-card'>
-                            <img src='{$product['image']}' alt='{$product['name']}'>
-                            <h2>{$product['price']}</h2>
-                            <p>{$product['name']}</p>
-                            <p>⭐⭐⭐⭐⭐ {$product['reviews']} reviews</p>
-                        </div>
-                    </a>
-                    ";
-                }
-            ?>
+            @if($produk->isNotEmpty())
+                        @foreach ($produk as $item)
+                            @if($item->kategori == 'kucing')
+                                <a href="{{ url('/beli', ['id' => $item->id]) }}">
+                                    <div class='product-card'>
+                                        <img src="{{ asset('storage/' . $item->gambar_produk) }}" alt="{{ $item->nama }}">
+                                        <h2>Rp {{ number_format($item->harga, 0, ',', '.') }}</h2>
+                                        <p>{{ $item->nama }}</p>
+                                        <p>⭐⭐⭐⭐⭐ reviews</p>
+                                    </div>
+                                </a>
+                            @endif
+                        @endforeach
+                    @else
+                        <p>Tidak ada produk yang tersedia.</p>
+                    @endif
             </div>  
-            <div class="products">
-                <?php
-                $products = [
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                ];
-
-                foreach ($products as $product) {
-                    echo "
-                    <a href='" . url('Home') . "' target='_blank'>
-                        <div class='product-card'>
-                            <img src='{$product['image']}' alt='{$product['name']}'>
-                            <h2>{$product['price']}</h2>
-                            <p>{$product['name']}</p>
-                            <p>⭐⭐⭐⭐⭐ {$product['reviews']} reviews</p>
-                        </div>
-                    </a>
-                    ";
-                }
-            ?>
-            </div>  
-            <div class="products">
-                <?php
-                $products = [
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                ];
-
-                foreach ($products as $product) {
-                    echo "
-                    <a href='" . url('Home') . "' target='_blank'>
-                        <div class='product-card'>
-                            <img src='{$product['image']}' alt='{$product['name']}'>
-                            <h2>{$product['price']}</h2>
-                            <p>{$product['name']}</p>
-                            <p>⭐⭐⭐⭐⭐ {$product['reviews']} reviews</p>
-                        </div>
-                    </a>
-                    ";
-                }
-            ?>
-            </div>  
-            <div class="products">
-                <?php
-                $products = [
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                ];
-
-                foreach ($products as $product) {
-                    echo "
-                    <a href='" . url('Home') . "' target='_blank'>
-                        <div class='product-card'>
-                            <img src='{$product['image']}' alt='{$product['name']}'>
-                            <h2>{$product['price']}</h2>
-                            <p>{$product['name']}</p>
-                            <p>⭐⭐⭐⭐⭐ {$product['reviews']} reviews</p>
-                        </div>
-                    </a>
-                    ";
-                }
-            ?>
-            </div>  
-            <div class="products">
-                <?php
-                $products = [
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                    ["name" => "Beauty cat food 1 kg makanan kucing hair skin", "price" => "Rp 27.231", "reviews" => 110, "image" => "images/beauty.png"],
-                ];
-
-                foreach ($products as $product) {
-                    echo "
-                    <a href='" . url('Home') . "' target='_blank'>
-                        <div class='product-card'>
-                            <img src='{$product['image']}' alt='{$product['name']}'>
-                            <h2>{$product['price']}</h2>
-                            <p>{$product['name']}</p>
-                            <p>⭐⭐⭐⭐⭐ {$product['reviews']} reviews</p>
-                        </div>
-                    </a>
-                    ";
-                }
-            ?>
-            </div> 
-
+            
             <div class="pagination-container">
                 <div class="pagination">
                     <a href="#">&laquo;</a>

@@ -29,12 +29,17 @@ class TransaksiController extends Controller{
 
     public function store(Request $request){
         $storeData = $request->all();
-
+    
         $validate = Validator::make($storeData, [
             'tanggal_transaksi' => 'required|date',
             'metode_pembayaran' => 'required|in:Cash,Debit,GoPay,OVO,DANA,ShoopePay',
             'status' => 'required',
+            'quantity' => 'required|integer|min:1',
+            'total' => 'required|numeric|min:0',
+            'product_name' => 'required|string',
+            'product_id' => 'required|integer|exists:produk,id', // Ensure product exists
         ]);
+    
         if($validate->fails()){
             return response(['message' => $validate->errors()], 400);
         }
@@ -44,14 +49,15 @@ class TransaksiController extends Controller{
             return response(['message' => 'User Not Found!'], 404);
         }
         $storeData['id_user'] = $user->id;
-
+    
         $transaksi = Transaksi::create($storeData);
-
+    
         return response([
             'message' => 'Transaction Added Successfully!',
             'data' => $transaksi,
         ], 201);
     }
+    
 
     public function update(Request $request, string $id){
         $transaksi = Transaksi::findOrFail($id);

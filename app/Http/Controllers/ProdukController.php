@@ -45,39 +45,23 @@ class ProdukController extends Controller{
             'kategori' => 'required|in:Kucing,Anjing,Hewan Kecil,Reptil,Unggas',
             'deskripsi' => 'required|string',
             'stok' => 'required|numeric',
-            'gambar_produk' => 'required|',
+            'gambar_produk' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Validation failed',
+                'message' => 'Validasi gagal',
                 'errors' => $validator->errors()
             ], 400);
         }
-
+    
+        // Upload Gambar
         $uploadFolder = 'produk';
         $image = $request->file('gambar_produk');
-        $image_uploaded_path = $image->store($uploadFolder, 'public');
-        $uploadedImageResponse = basename($image_uploaded_path);
-
-        $storeData['gambar_produk'] = $uploadedImageResponse;
-
-        $produk = Produk::create($storeData);
-
-        return response([
-            'message' => 'Product Added Successfully!',
-            'data' => $produk,
-        ], 201);
-        // Handle image upload
-        if ($request->hasFile('gambar_produk')) {
-            $uploadFolder = 'produk';
-            $image = $request->file('gambar_produk');
-            $imagePath = $image->store($uploadFolder, 'public');
-            $imageFileName = basename($imagePath);
-        } else {
-            $imageFileName = null;
-        }
-        // Store product data
+        $imagePath = $image->store($uploadFolder, 'public');
+        $imageFileName = basename($imagePath);
+    
+        // Simpan Data Produk
         $produk = Produk::create([
             'nama' => $request->nama,
             'harga' => $request->harga,
@@ -86,13 +70,18 @@ class ProdukController extends Controller{
             'stok' => $request->stok,
             'gambar_produk' => $imageFileName,
         ]);
-
+    
         return response('Produk berhasil ditambahkan!', 200);
-    }
 
-    public function update(Request $request, $id){
+    }
+    
+
+    public function update(Request $request, $id)
+    {
+        // Find the product by ID
         $produk = Produk::findOrFail($id);
 
+        // Validate incoming request
         $validator = Validator::make($request->all(), [
             'nama' => 'required|string|max:255',
             'harga' => 'required|numeric',
@@ -126,12 +115,13 @@ class ProdukController extends Controller{
     public function destroy($id)
     {
         $produk = Produk::findOrFail($id);
-        if($produk->gambar_produk){
+        if ($produk->gambar_produk) {
             Storage::disk('public')->delete('produk/' . $produk->gambar_produk);
         }
-        
-        if($produk->delete()){
+        if ($produk->delete()) {
             return response('Produk berhasil di delete!', 200);
         }
+        
+
     }
 }

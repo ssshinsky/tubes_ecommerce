@@ -3,6 +3,9 @@
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\PemesananController;
+use App\Models\Produk;
+
 
 
 Route::get('/daftarBarang', [ProdukController::class, 'index'])->name('daftarBarang.index');
@@ -28,6 +31,10 @@ Route::post('/login', [UserController::class, 'login']);
 Route::get('/register', [UserController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [UserController::class, 'register'])->name('register');
 
+Route::post('/pemesanan', [PemesananController::class, 'store']);
+Route::get('/pilihbayar', function () {
+    return view('pilihbayar');
+});
 Route::get('/loginAndRegister', function () {
     return view('LoginAndRegister');
 });
@@ -42,6 +49,11 @@ Route::get('/Home', function (){
 
 Route::get('/beli', function (){
     return view('beli');
+});
+
+Route::get('/beli/{id}', function ($id) {
+    $item = Produk::findOrFail($id);
+    return view('beli', ['item' => $item]);
 });
 
 Route::get('/kucing', function (){
@@ -122,6 +134,12 @@ Route::get('/rating', function () {
 
     return view('rating', ['ratings' => $ratings]); 
 });
+
+
+
+Route::get('/Home', [ProdukController::class, 'home'])->name('home');
+
+Route::get('/kucing', [ProdukController::class, 'kucing'])->name('kucing');
 
 // Route::get('/daftarBarang', function () {
 //     $items = [
