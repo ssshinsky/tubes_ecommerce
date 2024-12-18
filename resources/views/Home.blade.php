@@ -321,7 +321,11 @@
                             @if($item->kategori == 'kucing')
                                 <a href="{{ url('/beli', ['id' => $item->id]) }}">
                                     <div class='product-card'>
-                                        <img src="{{ asset('storage/' . $item->gambar_produk) }}" alt="{{ $item->nama }}">
+                                        @if($item->gambar_produk)
+                                            <img src="{{ $item->gambar_produk }}" alt="{{ $item->nama }}" width="100">
+                                            @else
+                                            -
+                                        @endif
                                         <h2>Rp {{ number_format($item->harga, 0, ',', '.') }}</h2>
                                         <p>{{ $item->nama }}</p>
                                         <p>⭐⭐⭐⭐⭐ reviews</p>
