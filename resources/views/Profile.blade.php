@@ -130,9 +130,12 @@
                 <h2>Profil Saya</h2>
                 <div class="profile-card">
                     <div class="profile-picture">
-                        <img src="{{ asset('storage/user/' . Auth::user()->profile_picture) }}" alt="Profile Picture">
+                        @if (Auth::check() && Auth::user()->profile_picture)
+                            <img id="profile_picture" src="{{ asset('storage/user/' . Auth::user()->profile_picture) }}" alt="Profile Picture">
+                        @else
+                            <img id="profile_picture" src="{{ asset('images/default-profile.png') }}" alt="Default Profile Picture">
+                        @endif               
                     </div>
-
                     <form id="updateProfilePictureForm" enctype="multipart/form-data">
                         @csrf
                         <label for="profile_picture">Profile Picture</label>
@@ -179,7 +182,7 @@
 
                             if(!token){
                                 Toastify({
-                                    text: `<i class="fa-solid fa-exclamation-triangle"></i> You are not authenticated. Please log in.`,
+                                    text: <i class="fa-solid fa-exclamation-triangle"></i> You are not authenticated. Please log in.,
                                     backgroundColor: "#dc3545",
                                     duration: 3000,
                                     gravity: "top",
@@ -208,10 +211,11 @@
                                 document.getElementById('phone').value = data.no_telp;
                                 document.getElementById('email').value = data.email;
                                 document.getElementById('address').value = data.alamat;
+                                document.getElementById('profile_picure').value =data.profile_picture;
                             })
                             .catch(error => {
                                 Toastify({
-                                    text: `<i class="fa-solid fa-exclamation-triangle"></i> Error: ${error.message}`,
+                                    text: <i class="fa-solid fa-exclamation-triangle"></i> Error: ${error.message},
                                     backgroundColor: "#dc3545",
                                     duration: 3000,
                                     gravity: "top",
@@ -243,7 +247,7 @@
                                 .then(data => {
                                     if(data.message === 'Profile updated successfully'){
                                         Toastify({
-                                            text: `<i class="fa-solid fa-check-circle"></i> Profile updated successfully.`,
+                                            text: <i class="fa-solid fa-check-circle"></i> Profile updated successfully.,
                                             backgroundColor: "#28a745",
                                             duration: 3000,
                                             gravity: "top",
@@ -256,7 +260,7 @@
                                 })
                                 .catch(error => {
                                     Toastify({
-                                        text: `<i class="fa-solid fa-exclamation-circle"></i> Error: ${error.message}`,
+                                        text: <i class="fa-solid fa-exclamation-circle"></i> Error: ${error.message},
                                         backgroundColor: "#dc3545",
                                         duration: 3000,
                                         gravity: "top",
@@ -285,7 +289,7 @@
                                 .then(data => {
                                     if(data.message){
                                         Toastify({
-                                            text: `<i class="fa-solid fa-check-circle"></i> Profile picture updated successfully.`,
+                                            text: <i class="fa-solid fa-check-circle"></i> Profile picture updated successfully.,
                                             backgroundColor: "#28a745",
                                             duration: 3000,
                                             gravity: "top",
@@ -305,7 +309,7 @@
                                 })
                                 .catch(error => {
                                     Toastify({
-                                        text: `<i class="fa-solid fa-exclamation-circle"></i> Error: ${error.message}`,
+                                        text: <i class="fa-solid fa-exclamation-circle"></i> Error: ${error.message},
                                         backgroundColor: "#dc3545",
                                         duration: 3000,
                                         gravity: "top",
@@ -331,7 +335,7 @@
                                 if(response.ok){
                                     localStorage.removeItem('authToken');
                                     Toastify({
-                                        text: `<i class="fa-solid fa-check-circle"></i> You have successfully logged out.`,
+                                        text: <i class="fa-solid fa-check-circle"></i> You have successfully logged out.,
                                         backgroundColor: "#28a745",
                                         duration: 3000,
                                         gravity: "top",
@@ -349,7 +353,7 @@
                             .catch(error => {
                                 console.error('Error:', error.message);
                                 Toastify({
-                                    text: `<i class="fa-solid fa-exclamation-triangle"></i> Error: Unable to log out.`,
+                                    text: <i class="fa-solid fa-exclamation-triangle"></i> Error: Unable to log out.,
                                     backgroundColor: "#dc3545",
                                     duration: 3000,
                                     gravity: "top",

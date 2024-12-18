@@ -83,17 +83,12 @@
     }
 
     function goToPayment() {
-    const quantityInput = document.getElementById('quantity');
-    const totalPrice = quantityInput.value * pricePerUnit;
-
-    localStorage.setItem('product-name', "{{ $item->nama }}");
-    localStorage.setItem('product-image', "{{ $item->gambar_produk }}");
-    localStorage.setItem('product-price', "{{ $item->harga }}");
-    localStorage.setItem('quantity', quantityInput.value);
-    localStorage.setItem('total', totalPrice);
-
-    location.href = '{{ url('bayar') }}';
-}
+        const quantityInput = document.getElementById('quantity');
+        const totalPrice = quantityInput.value * pricePerUnit;
+        localStorage.setItem('quantity', quantityInput.value);
+        localStorage.setItem('total', totalPrice);
+        location.href = '{{ url('bayar') }}';
+    }
 
     function addToCart() {
         const quantityInput = document.getElementById('quantity');

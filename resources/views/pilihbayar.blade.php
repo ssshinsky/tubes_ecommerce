@@ -42,7 +42,7 @@
                     <h5 style="font-weight: bold;">E-Wallet (GoPay, OVO, dll)</h5>
                     <img src="{{ asset('images/ewallet.png') }}" alt="E-Wallet" class="img-fluid mb-3 card-img">
                     <p>Bayar cepat dengan e-wallet pilihan Anda.</p>
-                    <a onclick="location.href='{{ url('berhasilbayar') }}'" class="btn btn-success btn-animate">Pilih</a>
+                    <a href="#" class="btn btn-success btn-animate" data-bs-toggle="modal" data-bs-target="#eWalletModal">Pilih</a>
                 </div>
             </div>
         </div>
@@ -50,6 +50,31 @@
 
     </div>
 </div>
+
+<!-- Modal for E-Wallet Payment -->
+<div class="modal fade" id="eWalletModal" tabindex="-1" aria-labelledby="eWalletModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eWalletModalLabel">Pembayaran E-Wallet</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p>Scan QR Code berikut untuk melakukan pembayaran:</p>
+                <img src="{{ asset('images/qrcode.png') }}" alt="QR Code" class="img-fluid mb-3" style="max-width: 200px;">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success btn-animate" onclick="completePayment()">Sudah Bayar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function completePayment() {
+        location.href = '{{ url('berhasilbayar') }}';
+    }
+</script>
 
 <style>
     .btn-animate {

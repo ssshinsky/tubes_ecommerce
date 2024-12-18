@@ -3,6 +3,7 @@
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\PemesananController;
 use App\Models\Produk;
 
 
@@ -30,6 +31,10 @@ Route::post('/login', [UserController::class, 'login']);
 Route::get('/register', [UserController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [UserController::class, 'register'])->name('register');
 
+Route::post('/pemesanan', [PemesananController::class, 'store']);
+Route::get('/pilihbayar', function () {
+    return view('pilihbayar');
+});
 Route::get('/loginAndRegister', function () {
     return view('LoginAndRegister');
 });
