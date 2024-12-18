@@ -39,6 +39,7 @@ Route::get('/loginAndRegister', function () {
     return view('LoginAndRegister');
 });
 
+
 Route::get('/profile', function () {
     return view('Profile');
 });

@@ -13,16 +13,17 @@ class Pemesanan extends Model{
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'id_transaksi',
+        'id_user',
         'id_produk',
+        'metode_pembayaran',
         'status',
         'total_harga',
         'alamat_pemesanan',
         'tanggal_pemesanan',
     ];
 
-    public function transaksi(){
-        return $this->belongsTo(transaksi::class, 'id_transaksi');
+    public function user(){
+        return $this->belongsTo(Users::class, 'id_user');
     }
 
     public function produk(){
