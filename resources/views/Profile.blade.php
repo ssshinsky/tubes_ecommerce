@@ -131,21 +131,6 @@
                 <div class="profile-card">
                     
 
-                    <!-- <form id="updateProfilePictureForm" enctype="multipart/form-data">
-                        @csrf
-                        <label for="profile_picture">Profile Picture</label>
-                        <input type="file" id="profile_picture" name="profile_picture" accept="image/*" required>
-                        <button type="submit">Upload Picture</button>
-                    </form>
-
-                    <div id="picSuccessMessage" style="color: green; display: none;">
-                        Profile picture updated successfully.
-                    </div>
-
-                    <div id="picErrorMessage" style="color: red; display: none;">
-                        Error updating profile picture.
-                    </div> -->
-                    
                     <form id="updateProfileForm" method="POST" action="{{ route('profile.update') }}">
                         @csrf
                         <label for="username">Username</label>
@@ -206,7 +191,6 @@
                                 document.getElementById('phone').value = data.no_telp;
                                 document.getElementById('email').value = data.email;
                                 document.getElementById('address').value = data.alamat;
-                                document.getElementById('profile_picure').value =data.profile_picture;
                             })
                             .catch(error => {
                                 Toastify({

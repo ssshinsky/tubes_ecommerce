@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
@@ -94,6 +95,7 @@ class UserController extends Controller{
 
     public function showProfile(Request $request){
         $user = Auth::user();
+        Log::info('Authenticated User: ', ['user' => $user]);
 
         if(!$user){
             return response()->json(['message' => 'Unauthenticated.'], 401);

@@ -90,19 +90,50 @@
         location.href = '{{ url('bayar') }}';
     }
 
-    function addToCart() {
+    function addToCart(){
         const quantityInput = document.getElementById('quantity');
-        const totalPrice = quantityInput.value * pricePerUnit;
-        localStorage.setItem('cart-quantity', quantityInput.value);
-        localStorage.setItem('cart-total', totalPrice);
-        Toastify({
-            text: "Item berhasil ditambahkan ke keranjang!",
-            duration: 3000,
-            gravity: "top", 
-            position: 'right', 
-            backgroundColor: "#4CAF50",
-            className: "info",
-        }).showToast();
+        const quantity = parseInt(quantityInput.value);
+        const totalPrice = quantity * pricePerUnit;
+
+        const cartData = {
+            id_produk: {{ $item->id }},
+            quantity: quantity,
+            total_harga: totalPrice
+        };
+
+        fetch('/api/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify(cartData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.message === 'Item added to cart successfully!'){
+                Toastify({
+                    text: "Item berhasil ditambahkan ke keranjang!",
+                    duration: 3000,
+                    gravity: "top",
+                    position: 'right',
+                    backgroundColor: "#4CAF50",
+                    className: "info",
+                }).showToast();
+            }else{
+                throw new Error(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Toastify({
+                text: "Gagal menambahkan item ke keranjang!",
+                duration: 3000,
+                gravity: "top",
+                position: 'right',
+                backgroundColor: "#dc3545",
+            }).showToast();
+        });
     }
 </script>
 

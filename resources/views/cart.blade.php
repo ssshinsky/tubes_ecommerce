@@ -8,94 +8,12 @@
             <p class="text-white">Berikut adalah produk-produk yang telah Anda pilih.</p>
         </div>
 
-        <div class="col-12 mb-0" style="background-color: #d9e6d2; padding: 20px; border-radius: 0 0 10px 10px;">
-
-            <div class="row align-items-center mb-4 p-3" style="background-color: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
-                <div class="col-2">
-                    <img src="{{ asset('images/canin.jpg') }}" class="img-fluid rounded" style="width: 100px; height: 100px; object-fit: cover;" alt="Royal Canin">
-                </div>
-                <div class="col-6">
-                    <h5 class="m-0">Makanan Anjing Royal Canin</h5>
-                    <p class="text-muted">Untuk anjing kecil</p>
-                </div>
-                <div class="col-2 text-right">
-                    <h5 class="m-0">Rp 400.000</h5>
-                </div>
-                <div class="col-2 text-right">
-                    <div class="d-flex align-items-center justify-content-end">
-                        <div class="input-group" style="width: auto;">
-                            <button class="btn btn-outline-secondary" onclick="decreaseQuantity(this)" 
-                                    style="border-radius: 50%; width: 30px; height: 30px; font-size: 14px; border-color: #8ba889; background-color: #849573; color: white;">-</button>
-                            <input type="number" value="1" min="1" class="form-control text-center mx-1" 
-                                   style="width: 50px; height: 30px; font-size: 14px; padding: 0; border-radius: 5px; border-color: #849573;" onchange="calculateTotal()">
-                            <button class="btn btn-outline-secondary" onclick="increaseQuantity(this)" 
-                                    style="border-radius: 50%; width: 30px; height: 30px; font-size: 14px; border-color: #8ba889; background-color: #849573; color: white; margin-right:3px;">+</button>
-                        </div>
-                        <button class="btn btn-danger btn-sm ml-2" style="border-radius: 10px; padding: 5px 10px;" onclick="removeProduct(this)">Hapus</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row align-items-center mb-4 p-3" style="background-color: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
-                <div class="col-2">
-                    <img src="{{ asset('images/mainankaret.jpg') }}" class="img-fluid rounded" style="width: 100px; height: 100px; object-fit: cover;" alt="Dog Toy">
-                </div>
-                <div class="col-6">
-                    <h5 class="m-0">Mainan Anjing Karet</h5>
-                    <p class="text-muted">Mainan gemoy untuk anjing</p>
-                </div>
-                <div class="col-2 text-right">
-                    <h5 class="m-0">Rp 150.000</h5>
-                </div>
-                <div class="col-2 text-right">
-                    <div class="d-flex align-items-center justify-content-end">
-                        <div class="input-group" style="width: auto;">
-                            <button class="btn btn-outline-secondary" onclick="decreaseQuantity(this)" 
-                                    style="border-radius: 50%; width: 30px; height: 30px; font-size: 14px; border-color: #8ba889; background-color: #849573; color: white;">-</button>
-                            <input type="number" value="1" min="1" class="form-control text-center mx-1" 
-                                   style="width: 50px; height: 30px; font-size: 14px; padding: 0; border-radius: 5px; border-color: #849573;" onchange="calculateTotal()">
-                            <button class="btn btn-outline-secondary" onclick="increaseQuantity(this)" 
-                                    style="border-radius: 50%; width: 30px; height: 30px; font-size: 14px; border-color: #8ba889; background-color: #849573; color: white; margin-right:3px;">+</button>
-                        </div>
-                        <button class="btn btn-danger btn-sm ml-2" style="border-radius: 10px; padding: 5px 10px;" onclick="removeProduct(this)">Hapus</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row align-items-center mb-4 p-3" style="background-color: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
-                <div class="col-2">
-                    <img src="{{ asset('images/mangkuk.jpg') }}" class="img-fluid rounded" style="width: 100px; height: 100px; object-fit: cover;" alt="Dog Bowl">
-                </div>
-                <div class="col-6">
-                    <h5 class="m-0">Mangkuk Makan Anjing</h5>
-                    <p class="text-muted">Mangkuk anti tumpah untuk anjing</p>
-                </div>
-                <div class="col-2 text-right">
-                    <h5 class="m-0">Rp 100.000</h5>
-                </div>
-                <div class="col-2 text-right">
-                    <div class="d-flex align-items-center justify-content-end">
-                        <div class="input-group" style="width: auto;">
-                            <button class="btn btn-outline-secondary" onclick="decreaseQuantity(this)" 
-                                    style="border-radius: 50%; width: 30px; height: 30px; font-size: 14px; border-color: #8ba889; background-color: #849573; color: white;">-</button>
-                            <input type="number" value="1" min="1" class="form-control text-center mx-1" 
-                                   style="width: 50px; height: 30px; font-size: 14px; padding: 0; border-radius: 5px; border-color: #849573;" onchange="calculateTotal()">
-                            <button class="btn btn-outline-secondary" onclick="increaseQuantity(this)" 
-                                    style="border-radius: 50%; width: 30px; height: 30px; font-size: 14px; border-color: #8ba889; background-color: #849573; color: white; margin-right:3px;">+</button>
-                        </div>
-                        <button class="btn btn-danger btn-sm ml-2" style="border-radius: 10px; padding: 5px 10px;" onclick="removeProduct(this)">Hapus</button>
-                    </div>
-                </div>
-            </div>
-
+        <div id="cart-items" class="col-12 mb-0" style="background-color: #d9e6d2; padding: 20px; border-radius: 0 0 10px 10px;">
         </div>
 
         <div class="col-12 mt-4" style="background-color: #B3B792; padding: 20px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
-            <h4 class="text-white" id="total-amount" style="font-weight: bold;">Total: Rp 550.000</h4>
-            <button class="btn btn-success" style="border-radius: 20px; padding: 10px 30px; font-size: 1.2rem; background-color: #849573; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); transition: transform 0.3s, box-shadow 0.3s;" 
-            onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 20px rgba(0, 0, 0, 0.2)';" 
-            onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(0, 0, 0, 0.1)';" 
-            onclick="location.href='{{ url('pilihbayar') }}'">
+            <h4 class="text-white" id="total-amount" style="font-weight: bold;">Total: Rp 0</h4>
+            <button class="btn btn-success" style="border-radius: 20px; padding: 10px 30px;" onclick="location.href='{{ url('pilihbayar') }}'">
                 Lanjutkan ke Pembayaran
             </button>
         </div>
@@ -103,43 +21,95 @@
 </div>
 
 <script>
-    function calculateTotal() {
-        let total = 0;
-        const products = document.querySelectorAll('.row.align-items-center.mb-4');
-
-        products.forEach(product => {
-            const price = parseInt(product.querySelector('.text-right h5').innerText.replace(/Rp /, '').replace(/\./g, '').trim());
-            const quantity = parseInt(product.querySelector('input[type="number"]').value);
-            total += price * quantity;
-        });
-
-        document.getElementById('total-amount').innerText = 'Total: Rp ' + total.toLocaleString();
-
-        localStorage.setItem('total', total);
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
-        calculateTotal();
+        fetchCartItems();
     });
 
-    function increaseQuantity(button) {
-        const quantityInput = button.previousElementSibling;
-        quantityInput.value = parseInt(quantityInput.value) + 1;
-        calculateTotal();
+    function fetchCartItems(){
+        fetch('/api/cart')
+            .then(response => {
+                console.log('API Response Status:', response.status);
+                return response.json();
+            })
+            .then(data => {
+                console.log('Cart Data:', data);
+
+                if(!data.data || data.data.length === 0){
+                    document.getElementById('cart-items').innerHTML = `
+                        <p class="text-center">Keranjang Anda kosong!</p>`;
+                    document.getElementById('total-amount').innerText = 'Total: Rp 0';
+                    return;
+                }
+
+                const cartContainer = document.getElementById('cart-items');
+                cartContainer.innerHTML = '';
+                let total = 0;
+
+                data.data.forEach(item => {
+                    const product = item.produk;
+                    const price = item.total_harga;
+                    total += price;
+
+                    cartContainer.innerHTML += `
+                        <div class="row align-items-center mb-4 p-3" style="background-color: #fff; border-radius: 10px;">
+                            <div class="col-2">
+                                <img src="${product.gambar_produk || '/images/default.jpg'}" class="img-fluid rounded" style="width: 100px; height: 100px;" alt="${product.nama}">
+                            </div>
+                            <div class="col-6">
+                                <h5 class="m-0">${product.nama}</h5>
+                                <p class="text-muted">${product.deskripsi || ''}</p>
+                            </div>
+                            <div class="col-2 text-right">
+                                <h5 class="m-0">Rp ${price.toLocaleString()}</h5>
+                            </div>
+                            <div class="col-2 text-right">
+                                <button class="btn btn-danger btn-sm" onclick="removeProduct(${item.id})">Hapus</button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                document.getElementById('total-amount').innerText = 'Total: Rp ' + total.toLocaleString();
+            })
+            .catch(error => {
+                console.error('Error fetching cart items:', error.message);
+                document.getElementById('cart-items').innerHTML = `
+                    <p class="text-center text-danger">Gagal memuat keranjang.</p>`;
+            });
     }
 
-    function decreaseQuantity(button) {
-        const quantityInput = button.nextElementSibling;
-        if (parseInt(quantityInput.value) > 1) {
-            quantityInput.value = parseInt(quantityInput.value) - 1;
-            calculateTotal();
-        }
-    }
-
-    function removeProduct(button) {
-        const productRow = button.closest('.row.align-items-center.mb-4');
-        productRow.remove();
-        calculateTotal();
+    function removeProduct(id){
+        fetch(`/api/cart/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === 'Item removed from cart successfully'){
+                Toastify({
+                    text: "Item berhasil dihapus dari keranjang!",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#dc3545",
+                }).showToast();
+                fetchCartItems(); // Refresh cart view
+            }else{
+                throw new Error(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error removing item:', error.message);
+            Toastify({
+                text: "Gagal menghapus item dari keranjang!",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "#dc3545",
+            }).showToast();
+        });
     }
 </script>
 @endsection
