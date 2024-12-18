@@ -27,7 +27,7 @@
                     </div>
 
                     <span class="title">or use your email account</span>
-                    <input type="text" name="nama" placeholder="nama" required>
+                    <input type="text" name="nama" placeholder="Nama" required>
                     <input type="number" name="no_telp" placeholder="Nomor Telepon" required>
                     <input type="text" name="alamat" placeholder="Alamat" required>
                     <input type="email" name="email" placeholder="Email" required>
@@ -119,7 +119,7 @@
                     });
                 });
 
-                document.getElementById('loginForm').addEventListener('submit', function(e) {
+                document.getElementById('loginForm').addEventListener('submit', function(e){
                     e.preventDefault();
 
                     const formData = {
@@ -133,7 +133,10 @@
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         },
-                        body: JSON.stringify(formData),
+                        body: JSON.stringify({
+                            email: document.getElementById('email').value,
+                            password: document.getElementById('password').value
+                        }),
                     })
                     .then(response => response.json())
                     .then(data => {

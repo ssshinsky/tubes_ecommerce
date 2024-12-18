@@ -33,7 +33,7 @@
 
         <header>
             <div class="logo">
-                <a href="{{ url('Home') }}" target="_blank">
+                <a href="{{ url('Home') }}" target="_self">
                     <img src="{{asset('/images/logonama.png')}}" alt="Logo Atma Pethsop"/>
                 </a>
             </div>
@@ -129,11 +129,9 @@
             <div class="profile-section">
                 <h2>Profil Saya</h2>
                 <div class="profile-card">
-                    <div class="profile-picture">
-                        <img src="{{ asset('storage/user/' . Auth::user()->profile_picture) }}" alt="Profile Picture">
-                    </div>
+                    
 
-                    <form id="updateProfilePictureForm" enctype="multipart/form-data">
+                    <!-- <form id="updateProfilePictureForm" enctype="multipart/form-data">
                         @csrf
                         <label for="profile_picture">Profile Picture</label>
                         <input type="file" id="profile_picture" name="profile_picture" accept="image/*" required>
@@ -146,7 +144,7 @@
 
                     <div id="picErrorMessage" style="color: red; display: none;">
                         Error updating profile picture.
-                    </div>
+                    </div> -->
                     
                     <form id="updateProfileForm" method="POST" action="{{ route('profile.update') }}">
                         @csrf

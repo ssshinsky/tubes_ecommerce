@@ -53,7 +53,7 @@ class UserController extends Controller{
         if($validate->fails()){
             return response(['message' => $validate->errors()->first()], 400);
         }
-
+        
         if($loginData['email'] === 'admin@gmail.com' && $loginData['password'] === 'admin123'){
             $adminToken = 'admin-special-token';
 
