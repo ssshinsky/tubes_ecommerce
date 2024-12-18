@@ -8,6 +8,8 @@
 
         <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.js"></script>
     </head>
 
     <body>
@@ -31,7 +33,7 @@
 
         <header>
             <div class="logo">
-                <a href="{{ url('Home') }}" target="_blank">
+                <a href="{{ url('Home') }}" target="_self">
                     <img src="{{asset('/images/logonama.png')}}" alt="Logo Atma Pethsop"/>
                 </a>
             </div>
@@ -119,40 +121,32 @@
                     </ul>
                 </div>
 
-                <button class="logout"><a href="{{ url('loginAndRegister') }}" style="text-decoration: none; color: white;">Logout</a></button>
+                <button class="logout" id="logoutButton" style="text-decoration: none; color: white; background-color: red;">
+                    Logout
+                </button>
             </aside>
 
             <div class="profile-section">
                 <h2>Profil Saya</h2>
                 <div class="profile-card">
-<<<<<<< Updated upstream
-                    <div class="profile-picture">
-                        <img src="{{ asset('images/ProfilePic.png') }}" alt="Profile Picture">
-                    </div>
-
-                    <button class="change-picture">Ubah Gambar</button>
                     
-                    <form>
-=======
+
                     <form id="updateProfileForm" method="POST" action="{{ route('profile.update') }}">
                         @csrf
->>>>>>> Stashed changes
                         <label for="username">Username</label>
-                        <input type="text" id="username" value="Renaldy">
+                        <input type="text" id="username" name="username" required>
 
                         <label for="phone">Nomor Telepon</label>
-                        <input type="text" id="phone" value="081234567890">
-                    
+                        <input type="text" id="phone" name="phone" required>
+
                         <label for="email">Email</label>
-                        <input type="email" id="email" value="renaldyimut@gmail.com">
-                    
+                        <input type="email" id="email" name="email" required>
+
                         <label for="address">Alamat</label>
-                        <input type="text" id="address" value="jl. babarsari no. 86">
-                    
+                        <input type="text" id="address" name="address" required>
+
                         <button type="submit">Simpan</button>
                     </form>
-<<<<<<< Updated upstream
-=======
 
                     <div id="successMessage" style="color: green; display: none;">
                         Profile updated successfully.
@@ -207,7 +201,7 @@
                                     position: "right",
                                     escapeMarkup: false,
                                 }).showToast();
-                                // window.location.href = '/login';
+                                window.location.href = '/login';
                             });
 
                             document.getElementById('updateProfileForm').addEventListener('submit', function(e){
@@ -348,7 +342,6 @@
                             });
                         });
                     </script>
->>>>>>> Stashed changes
                 </div>
             </div>
         </div>

@@ -11,28 +11,26 @@
 <div class="container my-5">
     <div class="row">
         <div class="col-md-6 d-flex flex-column align-items-center">
-            <img src="{{ asset('images/canin.jpg') }}" class="img-fluid mb-3" style="max-width: 30%;" alt="Royal Canin">
-            <div class="d-flex justify-content-center">
-                <img src="{{ asset('images/canin.jpg') }}" class="img-thumbnail mx-1" style="width: 80px;">
-                <img src="{{ asset('images/canin.jpg') }}" class="img-thumbnail mx-1" style="width: 80px;">
-                <img src="{{ asset('images/canin.jpg') }}" class="img-thumbnail mx-1" style="width: 80px;">
-                <img src="{{ asset('images/canin.jpg') }}" class="img-thumbnail mx-1" style="width: 80px;">
-            </div>
+            @if($item->gambar_produk)
+            <img src="{{ $item->gambar_produk }}" alt="{{ $item->nama }}"style="max-width: 100%;">
+            @else
+            -
+            @endif
         </div>
 
         <div class="col-md-6 d-flex align-items-start flex-column">
             <div class="w-100 p-3" style="background-color: #B3B792; border-radius: 10px 10px 0 0;">
-                <h4 class="product-title m-0">Makanan Anjing Royal Canin untuk anjing kecil</h4>
+                <h4 class="product-title m-0">{{ $item->nama }}</h4>
             </div>
 
             <div class="w-100 p-3" style="background-color: #849573;">
-                <h5 class="m-0 text-white" style="font-weight: bold;" id="price">Rp 400.000</h5>
+                <h5 class="m-0 text-white" style="font-weight: bold;" id="price">Rp {{ number_format($item->harga, 0, ',', '.') }}</h5>
             </div>
 
             <div class="w-100" style="height: 5px; background-color: #B3B792;"></div>
 
             <div class="w-100 p-3" style="background-color: #849573;">
-                <p class="product-description text-white m-0">Deskripsi Produk : Makanan anjing royal canin memiliki nutrisi yang lengkap sesuai dengan kebutuhan anjing kecil agar pertumbuhannya maksimal.</p>
+                <p class="product-description text-white m-0">Deskripsi Produk : {{ $item->deskripsi }}</p>
             </div>
 
             <div class="w-100 p-3 d-flex align-items-center justify-content-between" style="background-color: #B3B792; border-radius: 0 0 10px 10px;">
@@ -58,7 +56,7 @@
 </div>
 
 <script>
-    const pricePerUnit = 400000;
+    const pricePerUnit = {{ $item->harga }};
 
     function updateTotalPrice() {
         const quantityInput = document.getElementById('quantity');
@@ -92,19 +90,50 @@
         location.href = '{{ url('bayar') }}';
     }
 
-    function addToCart() {
+    function addToCart(){
         const quantityInput = document.getElementById('quantity');
-        const totalPrice = quantityInput.value * pricePerUnit;
-        localStorage.setItem('cart-quantity', quantityInput.value);
-        localStorage.setItem('cart-total', totalPrice);
-        Toastify({
-            text: "Item berhasil ditambahkan ke keranjang!",
-            duration: 3000,
-            gravity: "top", 
-            position: 'right', 
-            backgroundColor: "#4CAF50",
-            className: "info",
-        }).showToast();
+        const quantity = parseInt(quantityInput.value);
+        const totalPrice = quantity * pricePerUnit;
+
+        const cartData = {
+            id_produk: {{ $item->id }},
+            quantity: quantity,
+            total_harga: totalPrice
+        };
+
+        fetch('/api/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify(cartData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.message === 'Item added to cart successfully!'){
+                Toastify({
+                    text: "Item berhasil ditambahkan ke keranjang!",
+                    duration: 3000,
+                    gravity: "top",
+                    position: 'right',
+                    backgroundColor: "#4CAF50",
+                    className: "info",
+                }).showToast();
+            }else{
+                throw new Error(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Toastify({
+                text: "Gagal menambahkan item ke keranjang!",
+                duration: 3000,
+                gravity: "top",
+                position: 'right',
+                backgroundColor: "#dc3545",
+            }).showToast();
+        });
     }
 </script>
 
